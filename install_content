@@ -1,0 +1,21 @@
+LABEL Downloading System Components.
+MKDIR System
+MKDIR System/Components
+DOWN System/Components/default.jar
+DOWN System/Components/io.jar
+DOWN System/Components/net.jar
+LABEL Downloading System Images
+MKDIR System/Ressources
+MKDIR System/Ressources/Images
+DOWN System/Ressources/Images/JEternalBackground.png
+MKDIR System/Ressources/Images/Cursors
+DOWN System/Ressources/Images/Cursors/DefaultCursor.png
+DOWN System/Ressources/Images/Cursors/ActionCursor.png
+LABEL Making some system directories
+MKDIR System/ApplicationData
+MKDIR System/SysApps
+LABEL Installing system apps..
+
+LABEL Creating Desktop
+MKDIR Desktop
+DOWN Desktop/Welcome.eef
