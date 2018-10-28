@@ -49,6 +49,7 @@ public class Jeternal {
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
+		app2PathMap.put("", "");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
 		try {

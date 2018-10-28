@@ -227,7 +227,8 @@ public class Desktop extends JDesktopPane {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g);
-		utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
+		if (utilButton != null)
+			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
 		if (taskBar != null) {
 			taskBar.setLocation(new Point(0, getHeight() - 42));
 			taskBar.setSize(new Dimension(getWidth(), 42));
