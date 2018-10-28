@@ -7,10 +7,8 @@ Picture of it at one of it's first version, build 381, early v18.10
 
 
 ## Credits
-Cristi Flavian - Wallpaper Maker
+Cristi Flavian - Mega Designer
 
+Randy Ramde - Main Developer
 
-Randy Ramde - Main Developper
-
-
-Albert Flavian - Second Developper + Designer
+Albert Flavian - Secondary Developer + Designer
