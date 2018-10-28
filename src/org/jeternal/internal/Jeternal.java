@@ -38,7 +38,7 @@ public class Jeternal {
 
 	private static Frame jEternal;
 	public static Desktop desktop;
-	private final static String jEternalVersion = "Blue, Build 378";
+	private final static String jEternalVersion = "Blue, Build 381";
 	static double tickTime = 1000000000.0 / 24;
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
