@@ -18,8 +18,11 @@ import org.jeternal.internal.eef.js.Misc;
 
 public class EEFRunner {
 
-	public static EEFRunner launch(File file) throws IOException {
+	private Object[] argv;
+	
+	public static EEFRunner launch(File file, Object... argv) throws IOException {
 		EEFRunner runner = new EEFRunner(file);
+		runner.argv = argv;
 		return runner;
 	}
 
@@ -90,6 +93,7 @@ public class EEFRunner {
 		try {
 			engine.put("out", programmOut);
 			engine.put("misc", new Misc());
+			engine.put("argv", argv);
 			engine.eval(new InputStreamReader(in));
 		} catch (ScriptException e) {
 			e.printStackTrace();

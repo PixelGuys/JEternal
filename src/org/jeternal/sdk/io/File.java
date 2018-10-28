@@ -25,7 +25,7 @@ public class File {
 			component = c;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException | NullPointerException e) {
-			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly plugged.");
+			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly loaded.");
 		}
 	}
 	

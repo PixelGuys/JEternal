@@ -44,12 +44,17 @@ public class Jeternal {
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
 	static HashMap<String, String> app2PathMap = new HashMap<>();
+	static HashMap<String, String> ext2App = new HashMap<>();
 
 	public static void main(String[] args) {
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
-		app2PathMap.put("", "");
+		ext2App.put("png", "Pictures Viewver");
+		ext2App.put("tiff", "Pictures Viewver");
+		ext2App.put("jpg", "Pictures Viewver");
+		ext2App.put("jpeg", "Pictures Viewver");
+		app2PathMap.put("Pictures Viewver", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
 		try {
@@ -189,7 +194,7 @@ public class Jeternal {
 		if (file.getName().endsWith(".eef")) {
 			try {
 				EEFRunner runner = EEFRunner.launch(file);
-				System.out.println("[OS] ["+file+"] signed: " + runner.isSigned());
+				System.out.println("[OS] ["+file+"] Is App Signed: " + runner.isSigned());
 				runner.start();
 			} catch (IOException e) {
 				Window window = new Window();
@@ -201,7 +206,30 @@ public class Jeternal {
 				e.printStackTrace();
 			}
 			return;
-		} else if (file.getName().endsWith(".jar")) {
+		}
+		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
+		for (String ext : ext2App.keySet()) {
+			if (ext.equals(fileExt)) {
+				String appName = ext2App.get(ext);
+				String appPath = app2PathMap.get(appName);
+				System.out.println("Running " + appPath);
+				try {
+					EEFRunner runner = EEFRunner.launch(new File("." + appPath), file);
+					System.out.println("[OS] ["+appPath+"] Is App Signed: " + runner.isSigned());
+					runner.start();
+				} catch (IOException e1) {
+					Window window = new Window();
+					window.setSize(256, 256);
+					window.setLocation(desktop.getWidth() / 2 - 120, desktop.getHeight() / 2 - 120);
+					window.setTitle("Application " + appName + " is invalid!");
+					window.add(new JLabel("Error while trying to launch " + file.getName() + " using " + appName + " at " + appPath + ": " + e1));
+					desktop.add(window);
+					e1.printStackTrace();
+				}
+				return;
+			}
+		}
+		if (file.getName().endsWith(".jar")) {
 			try {
 				URLClassLoader cld = new URLClassLoader(new URL[] {file.toURI().toURL()}, Jeternal.class.getClassLoader());
 				System.out.println(cld);

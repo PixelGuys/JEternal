@@ -14,6 +14,7 @@ public class Cursors {
 
 	public static Cursor DEFAULT_CURSOR;
 	public static Cursor ACTION_CURSOR;
+	public static Cursor LOADING_CURSOR;
 	
 	static {
 		try {
@@ -22,7 +23,12 @@ public class Cursors {
 			e.printStackTrace();
 		}
 		try {
-			ACTION_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/ActionCursor.png")), new Point(0, 0), "Default");
+			ACTION_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/ActionCursor.png")), new Point(0, 0), "Action");
+		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			LOADING_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/LoadingCursor.png")), new Point(0, 0), "Loading");
 		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
 			e.printStackTrace();
 		}
