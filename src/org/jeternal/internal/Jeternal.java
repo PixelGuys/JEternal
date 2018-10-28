@@ -38,9 +38,9 @@ public class Jeternal {
 
 	private static Frame jEternal;
 	public static Desktop desktop;
-	private final static String jEternalVersion = "Blue, Build 356";
-	static double tickTime = 1000000000.0 / 30;
-	static double renderTime = 1000000000.0 / 30;
+	private final static String jEternalVersion = "Blue, Build 378";
+	static double tickTime = 1000000000.0 / 24;
+	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
 	static HashMap<String, String> app2PathMap = new HashMap<>();
