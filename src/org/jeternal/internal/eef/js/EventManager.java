@@ -6,6 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EventManager {
 
+	//TODO use Collections.synchronizedList(...)
 	private static java.util.concurrent.CopyOnWriteArrayList<Event> eventQueue = new CopyOnWriteArrayList<Event>();
 	
 	public synchronized Event pullEvent() {

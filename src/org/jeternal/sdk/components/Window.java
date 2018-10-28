@@ -120,6 +120,7 @@ public class Window extends JInternalFrame {
 				iconifyButton.addActionListener(event -> {
 					try {
 						i.setIcon(!i.isIcon());
+						i.setVisible(false);
 					} catch (PropertyVetoException e) {
 						
 					}
@@ -141,6 +142,7 @@ public class Window extends JInternalFrame {
 						setLayout(new BorderLayout());
 						add(BorderLayout.WEST, titleLabel);
 						JPanel rightPanel = new JPanel();
+						rightPanel.setBackground(Color.BLACK);
 						rightPanel.add(iconifyButton);
 						rightPanel.add(closeButton);
 						add(BorderLayout.EAST, rightPanel);
