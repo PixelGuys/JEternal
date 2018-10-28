@@ -126,7 +126,7 @@ public class Desktop extends JDesktopPane {
 
 			@Override
 			public void run() {
-				Jeternal.shell(new File("./System/SysApps/ShortcutseApp.eef"));
+				Jeternal.shell(new File("./System/SysApps/Shortcutse.eef"));
 			}
 
 		});
@@ -179,8 +179,7 @@ public class Desktop extends JDesktopPane {
 			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/CustomBackground.png"));
 		} catch (IOException e) {
 			try {
-				desktopImage = ImageIO
-						.read(FileSystem.impl_loadFile("System/Ressources/Images/JEternalBackground.png"));
+				desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/JEternalBackground.png"));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

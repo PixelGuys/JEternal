@@ -38,8 +38,8 @@ public class Button extends JComponent {
 		return this.text;
 	}
 	
-	public void setOnAction(Runnable onAction) {
-		this.onAction = onAction;
+	public void setOnAction(Runnable run) {
+		this.onAction = run;
 	}
 	
 	public Runnable getOnAction() {
