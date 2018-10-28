@@ -121,7 +121,7 @@ public class Desktop extends JDesktopPane {
 		utilButton = new Button();
 		utilButton.setText("Shortcutse");
 		utilButton.setSize(70, 30);
-		add(utilButton);
+		//add(utilButton);
 		utilButton.setOnAction(new Runnable() {
 
 			@Override
