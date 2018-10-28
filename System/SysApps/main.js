@@ -11,7 +11,7 @@ buttonPrev.setBounds(0, 0, 42, 32);
 imageView.setBounds(0, 32, 200, 200);
 win.setLocation(100, 100);
 win.setLayout(null);
-win.setTitle("Picture Viewver");
+win.setTitle("Picture Viewer");
 win.add(buttonPrev);
 win.add(imageView);
 win.setVisible(true);

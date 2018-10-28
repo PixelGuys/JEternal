@@ -50,11 +50,11 @@ public class Jeternal {
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
-		ext2App.put("png", "Pictures Viewver");
-		ext2App.put("tiff", "Pictures Viewver");
-		ext2App.put("jpg", "Pictures Viewver");
-		ext2App.put("jpeg", "Pictures Viewver");
-		app2PathMap.put("Pictures Viewver", "/System/SysApps/Pictures.eef");
+		ext2App.put("png", "Pictures Viewer");
+		ext2App.put("tiff", "Pictures Viewer");
+		ext2App.put("jpg", "Pictures Viewer");
+		ext2App.put("jpeg", "Pictures Viewer");
+		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
 		try {
@@ -135,7 +135,7 @@ public class Jeternal {
 	
 	static void install(JLabel state, JProgressBar bar, JButton exit) {
 		try {
-			String baseURL = "file:///C:/Users/UserPC/Desktop/Randy RAMDE/Java/eclipse/workspace/Jeternal";
+			String baseURL = "file:///C:/Users/UserPC/Documents/GitHub/JEternal";
 			URL installInst = new URL(baseURL + "/install_content");
 			InputStream instIn = installInst.openStream();
 			Scanner sc = new Scanner(instIn);
@@ -146,7 +146,6 @@ public class Jeternal {
 				if (args[0].equals("LABEL")) {
 					state.setText(line.replaceFirst("LABEL ", ""));
 					curLabel = line.replaceFirst("LABEL ", "");
-				
 				}
 				if (args[0].equals("DOWN")) {
 					state.setText(curLabel + ": " + args[1]);
@@ -159,8 +158,6 @@ public class Jeternal {
 					}
 					out.close();
 					in.close();
-					
-					Thread.sleep(1000);
 				}
 				if (args[0].equals("MKDIR")) {
 					File dir = new File(args[1]);

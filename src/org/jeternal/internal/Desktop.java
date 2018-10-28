@@ -54,7 +54,7 @@ public class Desktop extends JDesktopPane {
 		frame.setMaximizable(true);
 		frame.setLayout(new BorderLayout());
 		frame.add(BorderLayout.NORTH, new JLabel(
-				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) ! Now let's download system resources and libraries.."));
+				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) ! Now let's download system resources and libraries..\n(Only supporting local repository)"));
 		JButton install = new JButton("Install");
 		install.addActionListener(new ActionListener() {
 
