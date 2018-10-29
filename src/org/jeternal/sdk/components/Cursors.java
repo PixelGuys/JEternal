@@ -18,17 +18,17 @@ public class Cursors {
 	
 	static {
 		try {
-			DEFAULT_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/DefaultCursor.png")), new Point(0, 0), "Default");
+			DEFAULT_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/DefaultCursor.png")), new Point(0, 0), "Default");
 		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			ACTION_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/ActionCursor.png")), new Point(0, 0), "Action");
+			ACTION_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/ActionCursor.png")), new Point(0, 0), "Action");
 		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			LOADING_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Cursors/LoadingCursor.png")), new Point(0, 0), "Loading");
+			LOADING_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/LoadingCursor.png")), new Point(0, 0), "Loading");
 		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
 			e.printStackTrace();
 		}

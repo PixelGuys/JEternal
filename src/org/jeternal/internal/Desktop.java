@@ -176,10 +176,10 @@ public class Desktop extends JDesktopPane {
 			return;
 		}
 		try {
-			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/CustomBackground.png"));
+			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/CustomBackground.png"));
 		} catch (IOException e) {
 			try {
-				desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Ressources/Images/Wallpapers/JEternalBackground.png"));
+				desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Wallpapers/JEternalBackground.png"));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}

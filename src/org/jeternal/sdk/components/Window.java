@@ -77,7 +77,7 @@ public class Window extends JInternalFrame {
 		//rootPane = new JRootPane();
 		windowButton = new Button();
 		icon = new BufferedImage(32, 32, BufferedImage.TYPE_3BYTE_BGR);
-		windowButton.setIcon(getDesktopIcon().createImage(32, 32));
+		//windowButton.setIcon(getDesktopIcon().createImage(32, 32));
 		
 		windowButton.setOnAction(new Runnable() {
 			public void run() {
@@ -178,8 +178,11 @@ public class Window extends JInternalFrame {
 	BufferedImage oldImg;
 	BufferedImage img = new BufferedImage(620, 480, BufferedImage.TYPE_4BYTE_ABGR);
 	Graphics2D imgGraphics = img.createGraphics();
+	private Dimension oldSize = new Dimension(0, 0);
+	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		windowButton.setText(getTitle());
 		int titleHeight = this.getMinimumSize().height - this.getUI().getMinimumSize(this).height;
 		if (ui != null && getUI() != ui) {
 			setUI(ui);
@@ -201,21 +204,38 @@ public class Window extends JInternalFrame {
 			imgGraphics = img.createGraphics();
 		}
 		continueRender = false;
-		EventManager.registerEvent(new Event(new Object[] {g}, Window.this, "repaint") {
-
-			{
-				this.bundled = new Object[] {imgGraphics};
-				this.source = Window.this;
-				this.type = "repaint";
-			}
-			
-			@Override
-			public void accept() {
-				continueRender = true;
-				//System.out.println("accepted repaint event = " + continueRender);
-			}
-			
-		});
+		if (lightweight) {
+			EventManager.registerEvent(new Event(new Object[] {g}, Window.this, "repaint") {
+	
+				{
+					this.bundled = new Object[] {imgGraphics};
+					this.source = Window.this;
+					this.type = "repaint";
+				}
+				
+				@Override
+				public void accept() {
+					continueRender = true;
+					//System.out.println("accepted repaint event = " + continueRender);
+				}
+				
+			});
+		}
+		if (!oldSize.equals(getSize())) {
+			oldSize = getSize();
+			EventManager.registerEvent(new Event(new Object[] {g}, Window.this, "repaint") {
+				
+				{
+					this.bundled = new Object[] {imgGraphics};
+					this.source = Window.this;
+					this.type = "resize";
+				}
+				
+				@Override
+				public void accept() {}
+				
+			});
+		}
 		if (lightweight) {
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.drawImage(img, 0, titleHeight, null);

@@ -22,6 +22,9 @@ public class EventManager {
 				
 			}
 		}
+		if (evt == null) {
+			return pullEvent();
+		}
 		return evt;
 	}
 	
