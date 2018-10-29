@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -42,6 +43,7 @@ public class Desktop extends JDesktopPane {
 	private int selectWidth;
 	private int selectHeight;
 	private Button utilButton;
+	private Button startButton;
 
 	private BufferedImage desktopImage;
 	private JPanel taskBar;
@@ -54,7 +56,10 @@ public class Desktop extends JDesktopPane {
 		frame.setMaximizable(true);
 		frame.setLayout(new BorderLayout());
 		frame.add(BorderLayout.NORTH, new JLabel(
-				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) ! Now let's download system resources and libraries..\n(Only supporting local repository)"));
+				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) !"));
+		frame.add(BorderLayout.WEST, new JLabel(
+				"Now let's download system resources and libraries..\n(Only supporting local repository)"
+				));
 		JButton install = new JButton("Install");
 		install.addActionListener(new ActionListener() {
 
@@ -121,7 +126,17 @@ public class Desktop extends JDesktopPane {
 		utilButton = new Button();
 		utilButton.setText("Shortcutse");
 		utilButton.setSize(70, 30);
+		
+		try {
+			startButton = new Button();
+			startButton.setSize(32, 32);
+			startButton.setIcon(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/JEternalLogo128.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		//add(utilButton);
+		add(startButton);
 		utilButton.setOnAction(new Runnable() {
 
 			@Override
@@ -153,6 +168,8 @@ public class Desktop extends JDesktopPane {
 
 	}
 
+	int mouseX, mouseY;
+	
 	@SuppressWarnings("deprecation")
 	Desktop() {
 		setBackground(Color.WHITE);
@@ -176,7 +193,7 @@ public class Desktop extends JDesktopPane {
 			return;
 		}
 		try {
-			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/CustomBackground.png"));
+			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Wallpapers/CustomWallpaper.png"));
 		} catch (IOException e) {
 			try {
 				desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Wallpapers/JEternalBackground.png"));
@@ -197,6 +214,11 @@ public class Desktop extends JDesktopPane {
 					selectX = arg0.getX();
 					selectY = arg0.getY();
 				}
+			}
+			
+			public void mouseMoved(MouseEvent e) {
+				mouseX = e.getX();
+				mouseY = e.getY();
 			}
 
 			public void mouseReleased(MouseEvent arg0) {
@@ -228,9 +250,12 @@ public class Desktop extends JDesktopPane {
 		super.paintComponent(g);
 		if (utilButton != null)
 			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
+		if (startButton != null) {
+			startButton.setBounds(0, getHeight() - 42, 42, 42);
+		}
 		if (taskBar != null) {
-			taskBar.setLocation(new Point(0, getHeight() - 42));
-			taskBar.setSize(new Dimension(getWidth(), 42));
+			taskBar.setLocation(new Point(42, getHeight() - 42));
+			taskBar.setSize(new Dimension(getWidth() - 42, 42));
 		}
 		if (desktopImage != null)
 			g.drawImage(desktopImage, 0, 0, getWidth(), getHeight(), null);
@@ -241,6 +266,8 @@ public class Desktop extends JDesktopPane {
 			g.fillRect(fX, fY, selectWidth, selectHeight);
 			g.setColor(Color.BLUE);
 		}
+
+		//g.drawImage(desktopImage, mouseX, mouseY, null);
 	}
 
 }

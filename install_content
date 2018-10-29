@@ -5,17 +5,27 @@ DOWN System/Components/default.jar
 DOWN System/Components/io.jar
 DOWN System/Components/net.jar
 LABEL Downloading System Images
-MKDIR System/Ressources
-MKDIR System/Ressources/Images
-DOWN System/Ressources/Images/JEternalBackground.png
-MKDIR System/Ressources/Images/Cursors
-DOWN System/Ressources/Images/Cursors/DefaultCursor.png
-DOWN System/Ressources/Images/Cursors/ActionCursor.png
+MKDIR System/Resources
+MKDIR System/Resources/Images
+MKDIR System/Resources/Images/Wallpapers
+DOWN System/Resources/Images/Wallpapers/JEternalBackground.png
+DOWN System/Resources/Images/Wallpapers/EpicDragon.png
+MKDIR System/Resources/Images/Cursors
+DOWN System/Resources/Images/Cursors/DefaultCursor.png
+DOWN System/Resources/Images/Cursors/ActionCursor.png
+DOWN System/Resources/Images/Cursors/LoadingCursor.png
+LABEL Downloading logos..
+DOWN System/Resources/Images/JEternalLogo128.png
+DOWN System/Resources/Images/JEternalLogo32.png
+DOWN System/Resources/Images/JEternalLogo612.png
+LABEL Downloading system applications..
+MKDIR System/SysApps
+DOWN System/SysApps/Pictures.eef
 LABEL Making some system directories
 MKDIR System/ApplicationData
 MKDIR System/SysApps
 LABEL Installing system apps..
-
 LABEL Creating Desktop
 MKDIR Desktop
-DOWN Desktop/Welcome.eef
+DOWN Desktop/LaunchMe.eef
+LABEL Installation done!

@@ -163,6 +163,7 @@ public class Jeternal {
 					File dir = new File(args[1]);
 					dir.mkdir();
 				}
+				Thread.sleep(1000);
 			}
 			sc.close();
 		} catch (Exception e) {

@@ -66,15 +66,11 @@ public class DesktopFile extends JComponent {
 		if (selected == true) {
 			if (selectChance == true)
 				selectChance = false;
-			g.setColor(Color.GREEN);
-			g.fillRect(4, 4, getWidth() / 4, getHeight() / 4);
-			g.translate(4, 4);
+			g.translate(3, 12);
+			box.setLocation(0, 4);
+			box.setSize(4, 4);
 			box.paint(g);
-			g.translate(-4, -4);
-			g.setColor(Color.BLACK);
-			g.drawRect(4, 4, getWidth() / 4, getHeight() / 4);
-			g.setColor(new Color(100, 100, 130, 127));
-			g.fillRect(0, 0, getWidth(), getHeight());
+			g.translate(-3, -12);
 		}
 	}
 
