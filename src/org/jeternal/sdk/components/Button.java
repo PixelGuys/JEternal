@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
-public class Button extends JComponent {
+public class Button extends JEComponent {
 	
 	private static final long serialVersionUID = 1L;
 	

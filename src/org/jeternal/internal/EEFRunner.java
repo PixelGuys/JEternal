@@ -79,6 +79,7 @@ public class EEFRunner {
 	}
 	
 	void runJS(InputStream in) throws IOException {
+		System.setProperty("nashorn.args", "--language=es6");
 		ScriptEngineManager manager = new ScriptEngineManager();
 		ScriptEngine engine = manager.getEngineByMimeType("text/javascript");
 		System.out.println(engine);

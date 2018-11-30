@@ -2,6 +2,8 @@ package org.jeternal.internal;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -28,10 +30,12 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.components.Button;
 import org.jeternal.sdk.components.Cursors;
+import org.jeternal.sdk.components.JEComponent;
 import org.jeternal.sdk.components.Window;
 
 public class Desktop extends JDesktopPane {
@@ -47,6 +51,8 @@ public class Desktop extends JDesktopPane {
 
 	private BufferedImage desktopImage;
 	private JPanel taskBar;
+	
+	private BufferedImage currentCursor;
 
 	void missing_() {
 		JInternalFrame frame = new JInternalFrame();
@@ -178,7 +184,7 @@ public class Desktop extends JDesktopPane {
 			return;
 		} else {
 			File[] files = new File("System/Components").listFiles();
-			if (files.length < 3) {
+			if (files.length < 1) {
 
 				missing_();
 				return;
@@ -244,6 +250,20 @@ public class Desktop extends JDesktopPane {
 		super.remove(w);
 		taskBar.remove(w.getWindowButton());
 	}
+	
+	public Component lowestComponentAt(Container parent, int x, int y) {
+		Component c = SwingUtilities.getDeepestComponentAt(parent, x, y);
+		if (c != null && c != parent) {
+			if (c instanceof Container) {
+				Component ci = lowestComponentAt((Container) c, x, y);
+				//System.out.println(ci);
+				if (ci != null) {
+					return ci;
+				}
+			}
+		}
+		return c;
+	}
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -262,12 +282,17 @@ public class Desktop extends JDesktopPane {
 		int fX = selectX;
 		int fY = selectY;
 		if (selectX != 0) {
-			g.setColor(new Color(127, 127, 177, 127));
+			g.setColor(new Color(127, 127, 177, 153));
 			g.fillRect(fX, fY, selectWidth, selectHeight);
 			g.setColor(Color.BLUE);
 		}
 
-		//g.drawImage(desktopImage, mouseX, mouseY, null);
+		Component c = lowestComponentAt(this, mouseX, mouseY);
+		
+		//System.out.println(c);
+		if (c instanceof JEComponent) {
+			g.drawImage(((JEComponent) c).getLightWeightCursor(), mouseX, mouseY, null);
+		}
 	}
 
 }

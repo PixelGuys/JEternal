@@ -1,19 +1,15 @@
-var file = argv[0];
-var UIModule = misc.loadModule("system", "ui"); /* or misc.loadModule("system/ui"); */
+var dir = argv[0];
+var ui = misc.loadModule("system", "ui"); /* or misc.loadModule("system/ui"); */
 var EventModule = misc.loadModule("system", "event");
-var win = UIModule.createWindow();
-var buttonPrev = UIModule.createComponent("Button");
-var imageView = UIModule.createComponent("ImageView");
-var image = UIModule.readImage(file);
-imageView.setImage(image);
-buttonPrev.setText("<<");
-buttonPrev.setBounds(0, 0, 42, 32);
-imageView.setBounds(0, 32, 200, 200);
-win.setLocation(100, 100);
-win.setLayout(null);
-win.setTitle("Pictures");
-win.add(buttonPrev);
-win.add(imageView);
+var fs = misc.loadModule("system", "filesystem")
+var win = ui.createWindow();
+var root = ui.createComponent("Pane");
+var i = 0;
+
+
+win.setLocationRelativeTo(null);
+win.setTitle("Explorer");
+win.add(ui.createComponent("Scroller", root))
 win.setVisible(true);
 
 while (true) {
@@ -23,10 +19,31 @@ while (true) {
 	event.accept();
 }
 
+function createIcon(file) {
+	var pane = ui.createComponent("Pane");
+	var imageView = ui.createComponent("ImageView")
+	var label = ui.createComponent("Label")
+	var image = null
+	if (file.isDirectory())
+		image = ui.readImage("System/Resources/Images/FileDefaultIcon.png")
+	else {
+		if (file.getExtension() == "png") {
+			image = ui.readImage(file.getPath())
+		}
+		else {
+			image = ui.readImage("System/Resources/Images/FileDefaultIcon.png")
+		}
+	}
+	imageView.setImage(image);
+	//label.setText(file.getPath())
+	pane.add(imageView);
+	pane.add(label);
+}
+
 function render(g) {
 	//g.drawString("Hello!", 64, 40);
 }
 
 function update(win) {
-	imageView.setBounds(0, 32, win.getWidth(), win.getHeight() - 32)
+	
 }

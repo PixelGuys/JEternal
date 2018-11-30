@@ -8,7 +8,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jeternal.internal.Jeternal;
 import org.jeternal.sdk.components.Window;
@@ -43,13 +46,22 @@ public class UI {
 		return window;
 	}
 	
-	public Object createComponent(String name) {
+	public Object createComponent(String name, Object... args) {
 		System.out.println("create " + name);
 		if (name.equals("Button")) {
-			return new JButton("Test");
+			return new JButton("{jeternal.default.button}");
 		}
 		if (name.equals("ImageView")) {
 			return new ImageView();
+		}
+		if (name.equals("Label")) {
+			return new JLabel("{jeternal.default.label}");
+		}
+		if (name.equals("Pane")) {
+			return new JPanel();
+		}
+		if (name.equals("Scroller")) {
+			return new JScrollPane((JComponent) args[0]);
 		}
 		return null;
 	}
