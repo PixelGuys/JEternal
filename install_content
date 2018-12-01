@@ -1,9 +1,7 @@
 LABEL Downloading System Components.
 MKDIR System
 MKDIR System/Components
-DOWN System/Components/default.jar
 DOWN System/Components/io.jar
-DOWN System/Components/net.jar
 LABEL Downloading System Images
 MKDIR System/Resources
 MKDIR System/Resources/Images

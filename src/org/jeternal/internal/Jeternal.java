@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -133,13 +134,23 @@ public class Jeternal {
 
 	}
 	
+	static int steps;
+	
 	static void install(JLabel state, JProgressBar bar, JButton exit) {
 		try {
-			String baseURL = "file:///C:/Users/UserPC/Documents/GitHub/JEternal";
+			String baseURL = "https://raw.githubusercontent.com/MunirkSoft/JEternal/master";
 			URL installInst = new URL(baseURL + "/install_content");
 			InputStream instIn = installInst.openStream();
-			Scanner sc = new Scanner(instIn);
+			String str = new String(instIn.readAllBytes());
+			Scanner sc = new Scanner(str);
 			String curLabel = "";
+			steps = 0;
+			sc.findAll(Pattern.compile("(\\r\\n|\\r|\\n)")).iterator().forEachRemaining((mr) -> {
+				steps++;
+			});
+			sc.close();
+			sc = new Scanner(str);
+			bar.setMaximum(steps);
 			while (sc.hasNext()) {
 				String line = sc.nextLine();
 				String[] args = line.split(" ");
@@ -153,9 +164,7 @@ public class Jeternal {
 					InputStream in = url.openStream();
 					File file = new File(args[1]);
 					FileOutputStream out = new FileOutputStream(file);
-					while (in.available() != 0) {
-						out.write(in.read());
-					}
+					in.transferTo(out);
 					out.close();
 					in.close();
 				}
@@ -163,7 +172,8 @@ public class Jeternal {
 					File dir = new File(args[1]);
 					dir.mkdir();
 				}
-				Thread.sleep(1000);
+				bar.setValue(bar.getValue() + 1);
+				Thread.sleep(1000); // only for step-by-step install
 			}
 			sc.close();
 		} catch (Exception e) {

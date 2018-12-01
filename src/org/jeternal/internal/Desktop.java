@@ -30,6 +30,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import org.jeternal.sdk.FileSystem;
@@ -56,16 +57,17 @@ public class Desktop extends JDesktopPane {
 
 	void missing_() {
 		JInternalFrame frame = new JInternalFrame();
-		frame.setTitle("Error!");
+		frame.setTitle("Welcome!");
 		frame.setIconifiable(true);
 		frame.setResizable(true);
 		frame.setMaximizable(true);
 		frame.setLayout(new BorderLayout());
-		frame.add(BorderLayout.NORTH, new JLabel(
-				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) !"));
-		frame.add(BorderLayout.WEST, new JLabel(
-				"Now let's download system resources and libraries..\n(Only supporting local repository)"
-				));
+		JTextArea area = new JTextArea(
+				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) !\n"
+				+ "Now let's download system resources and libraries..\n(Only supporting local repository)"
+				);
+		area.setEditable(false);
+		frame.add(BorderLayout.CENTER, area);
 		JButton install = new JButton("Install");
 		install.addActionListener(new ActionListener() {
 
@@ -121,7 +123,7 @@ public class Desktop extends JDesktopPane {
 		south.add(quit);
 		frame.add(BorderLayout.SOUTH, south);
 		frame.setSize(640, 320);
-		frame.setLocation(400, 400);
+		frame.setLocation(getWidth() / 2, getHeight() / 2);
 		frame.show();
 		setBackground(Color.BLUE);
 		add(frame);
