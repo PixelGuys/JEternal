@@ -173,7 +173,7 @@ public class Jeternal {
 					dir.mkdir();
 				}
 				bar.setValue(bar.getValue() + 1);
-				Thread.sleep(1000); // only for step-by-step install
+				//Thread.sleep(1000); // only for step-by-step install
 			}
 			sc.close();
 		} catch (Exception e) {
