@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 
 import javax.script.ScriptEngine;
@@ -15,10 +17,12 @@ import javax.script.ScriptException;
 import org.jeternal.internal.eef.EEFFile;
 import org.jeternal.internal.eef.Manifest;
 import org.jeternal.internal.eef.js.Misc;
+import org.jeternal.internal.eef.ESLFile;
 
 public class EEFRunner {
 
 	private Object[] argv;
+	private ScriptEngine engine;
 	
 	public static EEFRunner launch(File file, Object... argv) throws IOException {
 		EEFRunner runner = new EEFRunner(file);
@@ -32,6 +36,9 @@ public class EEFRunner {
 
 	public void setProgrammOut(PrintStream programmOut) {
 		this.programmOut = programmOut;
+		if (engine != null) {
+			engine.put("out", programmOut);
+		}
 	}
 
 	public Reader getProgrammIn() {
@@ -45,34 +52,11 @@ public class EEFRunner {
 	public File getFile() {
 		return file;
 	}
-
-	boolean signed = false;
+	
 	private PrintStream programmOut = System.out;
 	private Reader programmIn = new InputStreamReader(System.in);
 	private File file;
-	private byte[] memory;
-	private int empty;
 	private EEFFile eef;
-	private static int max = 1000 * 1000 * 1000; // 1 GO
-
-	public String rmem_8str(int addr) {
-		StringBuilder builder = new StringBuilder();
-		int i = addr;
-		while (true) {
-			byte b = memory[i];
-			builder.append( (char) b);
-			if (b == '\0')
-				break;
-		}
-		return builder.toString();
-	}
-	
-	public int wmem_8str(int addr, String str) {
-		for (byte b : str.getBytes()) {
-			memory[empty + addr] = b;
-		}
-		return empty + addr;
-	}
 	
 	void runJS(ZipEntry entry) throws IOException {
 		runJS(eef.getInputStream(entry));
@@ -81,20 +65,15 @@ public class EEFRunner {
 	void runJS(InputStream in) throws IOException {
 		System.setProperty("nashorn.args", "--language=es6");
 		ScriptEngineManager manager = new ScriptEngineManager();
-		ScriptEngine engine = manager.getEngineByMimeType("text/javascript");
+		engine = manager.getEngineByMimeType("text/javascript");
 		System.out.println(engine);
-		Object obj = null;
-		try {
-			obj = engine.eval("java.lang.System.gc");
-		} catch (ScriptException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		System.out.println(obj);
 		try {
 			engine.put("out", programmOut);
 			engine.put("misc", new Misc());
 			engine.put("argv", argv);
+			engine.put("LoadLibrary", (Function<String, ESLFile>) (string) -> {
+				return ESLLoader.load(new File(string));
+			});
 			engine.eval(new InputStreamReader(in));
 		} catch (ScriptException e) {
 			e.printStackTrace();
@@ -118,10 +97,6 @@ public class EEFRunner {
 		th.setDaemon(true);
 		th.setName("EEF-"+file);
 		th.start();
-	}
-
-	public boolean isSigned() {
-		return signed;
 	}
 
 	EEFRunner(File file) throws IOException {

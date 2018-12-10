@@ -13,7 +13,7 @@ public class EEFFile extends ZipFile {
 	}
 	
 	public Manifest getManifest() throws IOException {
-		ZipEntry mfFile = getEntry("MANIFEST.manifest");
+		ZipEntry mfFile = getEntry(".MANIFEST");
 		if (mfFile == null) {
 			return null;
 		}

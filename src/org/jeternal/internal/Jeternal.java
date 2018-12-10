@@ -202,7 +202,6 @@ public class Jeternal {
 		if (file.getName().endsWith(".eef")) {
 			try {
 				EEFRunner runner = EEFRunner.launch(file);
-				System.out.println("[OS] ["+file+"] Is App Signed: " + runner.isSigned());
 				runner.start();
 			} catch (IOException e) {
 				Window window = new Window();
@@ -223,7 +222,6 @@ public class Jeternal {
 				System.out.println("Running " + appPath);
 				try {
 					EEFRunner runner = EEFRunner.launch(new File("." + appPath), file);
-					System.out.println("[OS] ["+appPath+"] Is App Signed: " + runner.isSigned());
 					runner.start();
 				} catch (IOException e1) {
 					Window window = new Window();
