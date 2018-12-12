@@ -5,13 +5,18 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -46,8 +51,56 @@ public class Jeternal {
 	public static SystemComponent IO_MAIN_COMPONENT;
 	static HashMap<String, String> app2PathMap = new HashMap<>();
 	static HashMap<String, String> ext2App = new HashMap<>();
+	static LoginScreen login = new LoginScreen();
 
+	private static byte[] charToByteArray(char[] input) {
+		byte[] bytes = new byte[input.length];
+		for (int i = 0; i < input.length; i++) {
+			bytes[i] = (byte) input[i];
+		}
+		return bytes;
+	}
+	
+	public static void overwriteAccount(String username, byte[] newPass) {
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("System/account.uac"));
+			MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+			byte[] d = digest.digest(newPass);
+			os.writeObject(username);
+			os.writeObject(d);
+			os.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void login(String username, char[] password) {
+		
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+			byte[] d = digest.digest(charToByteArray(password));
+			
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("System/account.uac"));
+			String un = (String) is.readObject();
+			byte[] dc = (byte[]) is.readObject();
+			is.close();
+			if (!MessageDigest.isEqual(d, dc) || !username.equals(un)) {
+				JOptionPane.showMessageDialog(jEternal, "Invalid username/password!", "Warning", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(jEternal, "Encryption or Account error!");
+		}
+		
+		desktop = new Desktop();
+		jEternal.remove(login);
+		jEternal.add(desktop);
+		jEternal.revalidate();
+	}
+	
 	public static void main(String[] args) {
+		//overwriteAccount("Zen1th", "testpass".getBytes());
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
@@ -76,8 +129,7 @@ public class Jeternal {
 			}
 
 		});
-		desktop = new Desktop();
-		jEternal.add(desktop);
+		jEternal.add(login);
 		jEternal.setVisible(true);
 
 		Thread th = new Thread() {
@@ -191,7 +243,8 @@ public class Jeternal {
 	}
 
 	static void paint() {
-		desktop.repaint();
+		if (desktop != null)
+			desktop.repaint();
 	}
 
 	static void update() {
