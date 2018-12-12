@@ -29,6 +29,7 @@ import javax.swing.plaf.metal.MetalInternalFrameUI;
 import javax.swing.plaf.synth.SynthInternalFrameUI;
 
 import org.jeternal.internal.Desktop;
+import org.jeternal.internal.Jeternal;
 import org.jeternal.internal.eef.js.Event;
 import org.jeternal.internal.eef.js.EventManager;
 
@@ -61,7 +62,7 @@ public class Window extends JInternalFrame {
 	}
 	
 	public void disposeWindow() {
-		Desktop desktop = (Desktop) getParent();
+		Desktop desktop = Jeternal.desktop;
 		desktop.remove(this);
 		System.gc();
 	}
@@ -78,6 +79,7 @@ public class Window extends JInternalFrame {
 		windowButton = new Button();
 		icon = new BufferedImage(32, 32, BufferedImage.TYPE_3BYTE_BGR);
 		//windowButton.setIcon(getDesktopIcon().createImage(32, 32));
+		windowButton.setPreferredSize(new Dimension(94, windowButton.getPreferredSize().width));
 		
 		windowButton.setOnAction(new Runnable() {
 			public void run() {

@@ -35,6 +35,7 @@ import javax.swing.event.ListDataListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
+import org.jeternal.internal.eef.EEFFile;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.SystemComponent;
 import org.jeternal.sdk.SystemLibrary;
@@ -44,14 +45,13 @@ public class Jeternal {
 
 	private static Frame jEternal;
 	public static Desktop desktop;
-	private final static String jEternalVersion = "Blue, Build 381";
-	static double tickTime = 1000000000.0 / 24;
+	private final static String jEternalVersion = "Blue, Build 391";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
 	static HashMap<String, String> app2PathMap = new HashMap<>();
 	static HashMap<String, String> ext2App = new HashMap<>();
-	static LoginScreen login = new LoginScreen();
+	static LoginScreen login;
 
 	private static byte[] charToByteArray(char[] input) {
 		byte[] bytes = new byte[input.length];
@@ -129,30 +129,25 @@ public class Jeternal {
 			}
 
 		});
+		login = new LoginScreen();
 		jEternal.add(login);
 		jEternal.setVisible(true);
 
 		Thread th = new Thread() {
 			public void run() {
-				long lastTickTime = System.nanoTime();
 				long lastRenderTime = System.nanoTime();
 				int frames = 0;
-				int ticks = 0;
 				long updatetime = 0;
 				long timer = System.currentTimeMillis();
 				while (true) {
 					updatetime = System.currentTimeMillis();
-					if (System.nanoTime() - lastTickTime > tickTime) {
-						update();
-						lastTickTime += tickTime;
-						ticks++;
-					} if (System.nanoTime() - lastRenderTime > renderTime) {
+					if (System.nanoTime() - lastRenderTime > renderTime) {
 						paint();
 						lastRenderTime += renderTime;
 						frames++;
 					}
 					updatetime = System.currentTimeMillis() - updatetime;
-					int sleeptime = (1000 / 60) - (int) updatetime;
+					int sleeptime = (1000 / 24) - (int) updatetime;
 					if (sleeptime < 0) sleeptime = 0;
 					try {
 						Thread.sleep(sleeptime);
@@ -162,8 +157,7 @@ public class Jeternal {
 					if (System.currentTimeMillis() - timer > 1000) {
 						timer += 1000;
 						if (true)
-							System.out.println(ticks + " ticks, " + frames + " ips");
-						ticks = 0;
+							System.out.println(frames + " ips");
 						frames = 0;
 					}
 				}
@@ -251,20 +245,26 @@ public class Jeternal {
 
 	}
 	
+	public static void launchEEF(File file) {
+		try {
+			EEFFile f = new EEFFile(file);
+			f.close();
+			EEFRunner runner = EEFRunner.launch(file);
+			runner.start();
+		} catch (IOException e) {
+			Window window = new Window();
+			window.setSize(256, 256);
+			window.setLocation(desktop.getWidth() / 2 - 100, desktop.getHeight() / 2 - 100);
+			window.setTitle("Invalid EEF !");
+			window.add(new JLabel("Error while trying to launch this EEF file: " + e));
+			desktop.add(window);
+			e.printStackTrace();
+		}
+	}
+	
 	public static void shell(File file) {
 		if (file.getName().endsWith(".eef")) {
-			try {
-				EEFRunner runner = EEFRunner.launch(file);
-				runner.start();
-			} catch (IOException e) {
-				Window window = new Window();
-				window.setSize(256, 256);
-				window.setLocation(desktop.getWidth() / 2 - 100, desktop.getHeight() / 2 - 100);
-				window.setTitle("Invalid EEF !");
-				window.add(new JLabel("Error while trying to launch this EEF file: " + e));
-				desktop.add(window);
-				e.printStackTrace();
-			}
+			launchEEF(file);
 			return;
 		}
 		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
@@ -273,6 +273,10 @@ public class Jeternal {
 				String appName = ext2App.get(ext);
 				String appPath = app2PathMap.get(appName);
 				System.out.println("Running " + appPath);
+				if (appPath.equals("%eef%")) {
+					launchEEF(file);
+					return;
+				}
 				try {
 					EEFRunner runner = EEFRunner.launch(new File("." + appPath), file);
 					runner.start();
@@ -345,9 +349,11 @@ public class Jeternal {
 						win0.setSize(360, 360);
 						win0.setLocation(desktop.getWidth() / 2 - 100, desktop.getHeight() / 2 - 100);
 						win0.setTitle("Always Open With " + list.getSelectedValue() + " ?");
-						desktop.add(win0);
+						//desktop.add(win0);
 						window.hide();
 						desktop.remove(window);
+						ext2App.put(fileExt, list.getSelectedValue());
+						shell(file);
 					}
 				}
 			}
