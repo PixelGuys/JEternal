@@ -3,6 +3,8 @@ package org.jeternal.internal.eef.js;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +13,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import org.jeternal.internal.Jeternal;
 import org.jeternal.sdk.components.Window;
@@ -46,6 +50,17 @@ public class UI {
 		return window;
 	}
 	
+	public ActionListener toActionListener(Runnable run) {
+		return new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				run.run();
+			}
+			
+		};
+	}
+	
 	public Object createComponent(String name, Object... args) {
 		System.out.println("create " + name);
 		if (name.equals("Button")) {
@@ -62,6 +77,12 @@ public class UI {
 		}
 		if (name.equals("Scroller")) {
 			return new JScrollPane((JComponent) args[0]);
+		}
+		if (name.equals("PasswordField")) {
+			return new JPasswordField();
+		}
+		if (name.equals("TextField")) {
+			return new JTextField();
 		}
 		return null;
 	}

@@ -4,17 +4,24 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.SynchronousQueue;
 
 public class EventManager {
 
-	//TODO use Collections.synchronizedList(...)
-	private static ArrayDeque<Event> eventQueue = new ArrayDeque<Event>();
+	private static LinkedBlockingDeque<Event> eventQueue = new LinkedBlockingDeque<Event>();
 	
 	public synchronized Event pullEvent() {
 		while (eventQueue.isEmpty()) {
 			Thread.onSpinWait();
 		}
-		Event evt = eventQueue.poll();
+		Event evt;
+		try {
+			evt = eventQueue.take();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return null;
+		}
 		if (evt == null) {
 			return pullEvent();
 		}

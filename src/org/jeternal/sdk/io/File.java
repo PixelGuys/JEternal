@@ -27,6 +27,7 @@ public class File {
 			component = c;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException | NullPointerException e) {
+			e.printStackTrace();
 			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly loaded.");
 		}
 	}
@@ -53,6 +54,10 @@ public class File {
 	
 	public boolean rename(String newName) {
 		return (boolean) component.comp_("rename", newName);
+	}
+	
+	public boolean exists() {
+		return (boolean) component.comp_("exists");
 	}
 	
 	public File[] list() {

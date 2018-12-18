@@ -51,6 +51,14 @@ public class Window extends JInternalFrame {
 	}
 	
 	public void disposeWindow() {
+		EventManager.registerEvent(new Event(new Object[0], this, "dispose") {
+
+			@Override
+			public void accept() {
+				
+			}
+			
+		});
 		Desktop desktop = Jeternal.desktop;
 		desktop.remove(this);
 		System.gc();

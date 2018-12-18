@@ -45,7 +45,7 @@ public class Jeternal {
 
 	private static Frame jEternal;
 	public static Desktop desktop;
-	private final static String jEternalVersion = "Blue, Build 391";
+	private final static String jEternalVersion = "19.01-pre";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
@@ -108,9 +108,11 @@ public class Jeternal {
 		ext2App.put("tiff", "Pictures Viewer");
 		ext2App.put("jpg", "Pictures Viewer");
 		ext2App.put("jpeg", "Pictures Viewer");
+		ext2App.put("uac", "Settings");
 		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
-		app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
+		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
+		app2PathMap.put("Settings", "/System/SysApps/Settings.eef");
 		try {
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Throwable e2) {
@@ -177,6 +179,7 @@ public class Jeternal {
 				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
 			e1.printStackTrace();
 		}
+		IO_LIB = lib;
 
 	}
 	
@@ -291,18 +294,6 @@ public class Jeternal {
 				}
 				return;
 			}
-		}
-		if (file.getName().endsWith(".jar")) {
-			try {
-				URLClassLoader cld = new URLClassLoader(new URL[] {file.toURI().toURL()}, Jeternal.class.getClassLoader());
-				System.out.println(cld);
-				Class<?> cl = cld.loadClass("jcomp.Compiler");
-				cl.getMethod("main", String[].class).invoke(null, new Object[] {new String[] {}});
-				cld.close();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			return;
 		}
 		Window window = new Window();
 		window.setSize(256, 256);
