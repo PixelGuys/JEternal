@@ -19,9 +19,11 @@ DOWN System/Resources/Images/JEternalLogo612.png
 LABEL Downloading system applications..
 MKDIR System/SysApps
 DOWN System/SysApps/Pictures.eef
+DOWN System/SysApps/settings.eef
+LABEL Download system libraries..
+MKDIR System/Libraries
 LABEL Making some system directories
 MKDIR System/ApplicationData
-MKDIR System/SysApps
 LABEL Installing system apps..
 LABEL Creating Desktop
 MKDIR Desktop

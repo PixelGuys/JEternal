@@ -62,7 +62,6 @@ public class UI {
 	}
 	
 	public Object createComponent(String name, Object... args) {
-		System.out.println("create " + name);
 		if (name.equals("Button")) {
 			return new JButton("{jeternal.default.button}");
 		}

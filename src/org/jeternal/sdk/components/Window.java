@@ -19,6 +19,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import org.jeternal.internal.Desktop;
 import org.jeternal.internal.Jeternal;
+import org.jeternal.internal.eef.js.DefaultEvent;
 import org.jeternal.internal.eef.js.Event;
 import org.jeternal.internal.eef.js.EventManager;
 
@@ -51,14 +52,7 @@ public class Window extends JInternalFrame {
 	}
 	
 	public void disposeWindow() {
-		EventManager.registerEvent(new Event(new Object[0], this, "dispose") {
-
-			@Override
-			public void accept() {
-				
-			}
-			
-		});
+		EventManager.registerEvent(new DefaultEvent(new Object[0], this, "dispose"));
 		Desktop desktop = Jeternal.desktop;
 		desktop.remove(this);
 		System.gc();
@@ -171,7 +165,6 @@ public class Window extends JInternalFrame {
 		return imgGraphics;
 	}
 	
-	boolean continueRender = true;
 	boolean lightweight = false;
 	int increment = 0;
 	BufferedImage oldImg;
@@ -202,38 +195,12 @@ public class Window extends JInternalFrame {
 			increment = 0;
 			imgGraphics = img.createGraphics();
 		}
-		continueRender = false;
 		if (lightweight) {
-			EventManager.registerEvent(new Event(new Object[] {g}, Window.this, "repaint") {
-	
-				{
-					this.bundled = new Object[] {imgGraphics};
-					this.source = Window.this;
-					this.type = "repaint";
-				}
-				
-				@Override
-				public void accept() {
-					continueRender = true;
-					//System.out.println("accepted repaint event = " + continueRender);
-				}
-				
-			});
+			EventManager.registerEvent(new DefaultEvent(new Object[] {imgGraphics}, Window.this, "repaint"));
 		}
 		if (!oldSize.equals(getSize())) {
 			oldSize = getSize();
-			EventManager.registerEvent(new Event(new Object[] {g}, Window.this, "repaint") {
-				
-				{
-					this.bundled = new Object[] {imgGraphics};
-					this.source = Window.this;
-					this.type = "resize";
-				}
-				
-				@Override
-				public void accept() {}
-				
-			});
+			EventManager.registerEvent(new DefaultEvent(new Object[] {imgGraphics}, Window.this, "resize"));
 		}
 		if (lightweight) {
 			g.fillRect(0, 0, getWidth(), getHeight());

@@ -74,10 +74,13 @@ public class EEFRunner {
 			engine.put("LoadLibrary", (Function<String, ESLFile>) (string) -> {
 				return ESLLoader.load(new File(string));
 			});
+			// Start
 			engine.eval(new InputStreamReader(in));
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
+		
+		// End
 	}
 	
 	public void start() throws IOException {

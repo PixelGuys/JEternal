@@ -25,6 +25,7 @@ public class EventManager {
 		if (evt == null) {
 			return pullEvent();
 		}
+		System.out.println("Took Event: " + evt);
 		return evt;
 	}
 	
