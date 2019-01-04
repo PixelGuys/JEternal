@@ -5,11 +5,13 @@ import java.io.IOException;
 
 import org.jeternal.internal.eef.ESLFile;
 
+import jdk.nashorn.api.scripting.NashornScriptEngine;
+
 public class ESLLoader {
 
-	public static ESLFile load(File path) {
+	public static ESLFile load(NashornScriptEngine nse, File path) {
 		try {
-			return new ESLFile(path);
+			return new ESLFile(nse, path);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

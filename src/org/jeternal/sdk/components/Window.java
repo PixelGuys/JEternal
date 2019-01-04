@@ -2,6 +2,7 @@ package org.jeternal.sdk.components;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,11 +10,14 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 import javax.swing.plaf.InternalFrameUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
@@ -29,6 +33,8 @@ public class Window extends JInternalFrame {
 	private Button windowButton;
 	private boolean isIconDefined = false;
 	private InternalFrameUI ui;
+	private String appID;
+	private boolean disposed;
 
 	public Image getIcon() {
 		return icon;
@@ -52,15 +58,21 @@ public class Window extends JInternalFrame {
 	}
 	
 	public void disposeWindow() {
-		EventManager.registerEvent(new DefaultEvent(new Object[0], this, "dispose"));
+		if (appID != null)
+			EventManager.registerEvent(appID, new DefaultEvent(new Object[0], this, "dispose"));
 		Desktop desktop = Jeternal.desktop;
 		desktop.remove(this);
 		System.gc();
+		disposed = true;
 	}
 	
 	boolean needRepaint = false;
 	public boolean needsRepaint() {
 		return needRepaint;
+	}
+	
+	public void setAppID(String appId) {
+		appID = appId;
 	}
 
 	public Window() {
@@ -68,23 +80,39 @@ public class Window extends JInternalFrame {
 		//setLayout(null);
 		//rootPane = new JRootPane();
 		windowButton = new Button();
-		icon = new BufferedImage(32, 32, BufferedImage.TYPE_3BYTE_BGR);
-		//windowButton.setIcon(getDesktopIcon().createImage(32, 32));
+		icon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+		windowButton.setIcon(icon);
+		setFrameIcon(new Icon() {
+
+			@Override
+			public void paintIcon(Component c, Graphics g, int x, int y) {
+				g.drawImage(icon, x, y, c);
+			}
+
+			@Override
+			public int getIconWidth() {
+				return icon.getWidth(null);
+			}
+
+			@Override
+			public int getIconHeight() {
+				return icon.getHeight(null);
+			}
+			
+		});
+		setDesktopIcon(new JDesktopIcon(this));
 		windowButton.setPreferredSize(new Dimension(94, windowButton.getPreferredSize().width));
 		
 		windowButton.setOnAction(new Runnable() {
 			public void run() {
 				try {
-					setIcon(false);
+					setIcon(!isIcon());
 				} catch (PropertyVetoException e) {
 					e.printStackTrace();
 				}
-				
-				setVisible(true);
-				restoreSubcomponentFocus();
 			}
 		});
-		if (ui == null &&true ) ui = new BasicInternalFrameUI(this) {
+		if (ui == null &&false ) ui = new BasicInternalFrameUI(this) {
 			
 			JPanel tp;
 			private JLabel titleLabel;
@@ -92,7 +120,7 @@ public class Window extends JInternalFrame {
 			public void paint(Graphics g, JComponent i) {
 				if (getNorthPane() != tp) {
 					setNorthPane(tp);
-					System.out.println("set to " + tp);
+					//System.out.println("set to " + tp);
 				}
 				JInternalFrame f = (JInternalFrame) i;
 				titleLabel.setText(f.getTitle());
@@ -113,7 +141,6 @@ public class Window extends JInternalFrame {
 				iconifyButton.addActionListener(event -> {
 					try {
 						i.setIcon(!i.isIcon());
-						i.setVisible(false);
 					} catch (PropertyVetoException e) {
 						
 					}
@@ -147,6 +174,40 @@ public class Window extends JInternalFrame {
 			}
 			
 		};
+		this.addInternalFrameListener(new InternalFrameListener() {
+
+			@Override
+			public void internalFrameOpened(InternalFrameEvent e) {
+				
+			}
+
+			@Override
+			public void internalFrameClosing(InternalFrameEvent e) {
+				if (!disposed) {
+					disposeWindow();
+				}
+			}
+
+			@Override
+			public void internalFrameClosed(InternalFrameEvent e) {}
+
+			@Override
+			public void internalFrameIconified(InternalFrameEvent e) {
+				setVisible(false);
+			}
+
+			@Override
+			public void internalFrameDeiconified(InternalFrameEvent e) {
+				setVisible(true);
+			}
+
+			@Override
+			public void internalFrameActivated(InternalFrameEvent e) {}
+
+			@Override
+			public void internalFrameDeactivated(InternalFrameEvent e) {}
+			
+		});
 		System.out.println(icon);
 		//setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.BLACK));
 		setSize(256, 256);
@@ -154,7 +215,7 @@ public class Window extends JInternalFrame {
 		//setMinimumSize(new Dimension(98, 46));
 		setVisible(true);
 		
-		setCursor(Cursors.DEFAULT_CURSOR);
+		//setCursor(Cursors.DEFAULT_CURSOR);
 	}
 	
 	public void setGraphicsLightweight(boolean lightweight) {
@@ -181,9 +242,9 @@ public class Window extends JInternalFrame {
 		}
 		if (getWidth() != img.getWidth() || getHeight() != img.getHeight() && lightweight) {
 			oldImg = img;
-			img = new BufferedImage(getWidth(), getHeight() - titleHeight, BufferedImage.TYPE_4BYTE_ABGR);
+			img = new BufferedImage(getWidth(), getHeight() - titleHeight, BufferedImage.TYPE_INT_ARGB);
 
-			Graphics2D imgGraphics = img.createGraphics();
+			imgGraphics = img.createGraphics();
 			imgGraphics.setPaint(Color.BLACK);
 			imgGraphics.fillRect(0, 0, getWidth(), getHeight());
 			imgGraphics.drawImage(oldImg, 0, 0, null);
@@ -196,15 +257,20 @@ public class Window extends JInternalFrame {
 			imgGraphics = img.createGraphics();
 		}
 		if (lightweight) {
-			EventManager.registerEvent(new DefaultEvent(new Object[] {imgGraphics}, Window.this, "repaint"));
+			if (appID != null)
+				EventManager.registerEvent(appID, new DefaultEvent(new Object[] {imgGraphics}, Window.this, "repaint"));
 		}
 		if (!oldSize.equals(getSize())) {
 			oldSize = getSize();
-			EventManager.registerEvent(new DefaultEvent(new Object[] {imgGraphics}, Window.this, "resize"));
+			if (appID != null)
+				EventManager.registerEvent(appID, new DefaultEvent(new Object[] {imgGraphics}, Window.this, "resize"));
 		}
 		if (lightweight) {
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.drawImage(img, 0, titleHeight, null);
+		}
+		if (isClosed() && !disposed) {
+			disposeWindow();
 		}
 	}
 	

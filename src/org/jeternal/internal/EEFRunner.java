@@ -6,23 +6,35 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.zip.ZipEntry;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.jeternal.internal.eef.EEFFile;
+import org.jeternal.internal.eef.ESLFile;
 import org.jeternal.internal.eef.Manifest;
 import org.jeternal.internal.eef.js.Misc;
-import org.jeternal.internal.eef.ESLFile;
+
+import jdk.nashorn.api.scripting.ClassFilter;
+import jdk.nashorn.api.scripting.NashornScriptEngine;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 public class EEFRunner {
 
 	private Object[] argv;
-	private ScriptEngine engine;
+	private NashornScriptEngine engine;
+	
+	static class DefaultClassFilter implements ClassFilter {
+
+		@Override
+		public boolean exposeToScripts(String className) {
+			return className.equals("java.awt.BorderLayout");
+		}
+		
+	}
 	
 	public static EEFRunner launch(File file, Object... argv) throws IOException {
 		EEFRunner runner = new EEFRunner(file);
@@ -64,15 +76,18 @@ public class EEFRunner {
 	
 	void runJS(InputStream in) throws IOException {
 		System.setProperty("nashorn.args", "--language=es6");
-		ScriptEngineManager manager = new ScriptEngineManager();
-		engine = manager.getEngineByMimeType("text/javascript");
+		NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
+		engine = (NashornScriptEngine) factory.getScriptEngine(new String[] {"--language=es6"}, EEFRunner.class.getClassLoader(), new DefaultClassFilter());
+		engine.getContext().setAttribute(ScriptEngine.ARGV, argv, ScriptContext.ENGINE_SCOPE);
 		System.out.println(engine);
 		try {
+			engine.put("exit", null);
+			engine.put("quit", null);
 			engine.put("out", programmOut);
 			engine.put("misc", new Misc());
 			engine.put("argv", argv);
 			engine.put("LoadLibrary", (Function<String, ESLFile>) (string) -> {
-				return ESLLoader.load(new File(string));
+				return ESLLoader.load(engine, new File(string));
 			});
 			// Start
 			engine.eval(new InputStreamReader(in));

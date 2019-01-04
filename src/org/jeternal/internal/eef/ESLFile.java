@@ -7,10 +7,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import jdk.nashorn.api.scripting.NashornScriptEngine;
+
 public class ESLFile extends ZipFile {
 
-	public ESLFile(File file) throws ZipException, IOException {
+	private NashornScriptEngine nse;
+	
+	public ESLFile(NashornScriptEngine nse,File file) throws ZipException, IOException {
 		super(file);
+		this.nse = nse;
+	}
+	
+	public NashornScriptEngine getScriptEngine() {
+		return nse;
 	}
 	
 	public ESLModule getESLModule() throws IOException {
@@ -19,7 +28,7 @@ public class ESLFile extends ZipFile {
 			return null;
 		}
 		InputStream is = getInputStream(mfFile);
-		ESLModule eslm = new ESLModule(is);
+		ESLModule eslm = new ESLModule(this, is);
 		return eslm;
 	}
 

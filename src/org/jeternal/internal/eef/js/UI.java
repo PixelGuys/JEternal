@@ -12,9 +12,13 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import org.jeternal.internal.Jeternal;
@@ -44,8 +48,9 @@ public class UI {
 		}
 	}
 	
-	public Window createWindow() {
+	public Window createWindow(String appID) {
 		Window window = new Window();
+		window.setAppID(appID);
 		Jeternal.desktop.add(window);
 		return window;
 	}
@@ -83,6 +88,20 @@ public class UI {
 		if (name.equals("TextField")) {
 			return new JTextField();
 		}
+		if (name.equals("TextArea")) {
+			return new JTextArea();
+		}
+		// Menus
+		if (name.equals("MenuBar")) {
+			return new JMenuBar();
+		}
+		if (name.equals("Menu")) {
+			return new JMenu();
+		}
+		if (name.equals("MenuItem")) {
+			return new JMenuItem();
+		}
+		
 		return null;
 	}
 	

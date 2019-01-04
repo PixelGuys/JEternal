@@ -2,6 +2,7 @@ package org.jeternal.internal;
 
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -30,6 +31,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListDataListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -85,6 +87,7 @@ public class Jeternal {
 			byte[] dc = (byte[]) is.readObject();
 			is.close();
 			if (!MessageDigest.isEqual(d, dc) || !username.equals(un)) {
+				//Toolkit.getDefaultToolkit().beep();
 				JOptionPane.showMessageDialog(jEternal, "Invalid username/password!", "Warning", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
@@ -94,13 +97,35 @@ public class Jeternal {
 		}
 		
 		desktop = new Desktop();
+		jEternal.setSize(1280, 720);
+		jEternal.setLocationRelativeTo(null);
 		jEternal.remove(login);
 		jEternal.add(desktop);
+		jEternal.setTitle("JEternal: " + username);
 		jEternal.revalidate();
+		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
+		try {
+			lib.loadComponent("io_system").comp_("init");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+			e1.printStackTrace();
+		}
+		IO_LIB = lib;
 	}
 	
 	public static void main(String[] args) {
 		//overwriteAccount("Zen1th", "testpass".getBytes());
+		
+		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+			if (info.getName().equals("CDE/Motif")) {
+				try {
+					UIManager.setLookAndFeel(info.getClassName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
@@ -112,7 +137,7 @@ public class Jeternal {
 		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
-		app2PathMap.put("Settings", "/System/SysApps/Settings.eef");
+		//app2PathMap.put("Settings", "/System/SysApps/Settings.eef");
 		try {
 			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		} catch (Throwable e2) {
@@ -120,7 +145,8 @@ public class Jeternal {
 		}
 		jEternal = new JFrame();
 		jEternal.setTitle("JEternal " + jEternalVersion);
-		jEternal.setSize(1280, 720);
+		jEternal.setSize(440, 180);
+		jEternal.setLocationRelativeTo(null);
 		//jEternal.setUndecorated(true);
 		//jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		jEternal.setBackground(Color.BLACK);
@@ -158,8 +184,7 @@ public class Jeternal {
 					}
 					if (System.currentTimeMillis() - timer > 1000) {
 						timer += 1000;
-						if (true)
-							System.out.println(frames + " ips");
+					//	System.out.println(frames + " ips");
 						frames = 0;
 					}
 				}
@@ -172,14 +197,7 @@ public class Jeternal {
 			return;
 		}
 		
-		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
-		try {
-			lib.loadComponent("io_system").comp_("init");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
-		}
-		IO_LIB = lib;
+		
 
 	}
 	
@@ -256,10 +274,12 @@ public class Jeternal {
 			runner.start();
 		} catch (IOException e) {
 			Window window = new Window();
-			window.setSize(256, 256);
 			window.setLocation(desktop.getWidth() / 2 - 100, desktop.getHeight() / 2 - 100);
 			window.setTitle("Invalid EEF !");
 			window.add(new JLabel("Error while trying to launch this EEF file: " + e));
+			window.setMaximizable(false);
+			window.setResizable(false);
+			window.pack();
 			desktop.add(window);
 			e.printStackTrace();
 		}

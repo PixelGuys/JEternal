@@ -24,8 +24,14 @@ public class DesktopFile extends JComponent {
 	}
 
 	public DesktopFile(File file) {
-		this.file = file;
 		box = new JCheckBox();
+		box.setSize(12, 12);
+		box.setVisible(false);
+		box.setBorderPaintedFlat(true);
+		setLayout(null);
+		add(box);
+		box.setLocation(4, 12);
+		this.file = file;
 		MouseAdapter adapter = new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
@@ -35,42 +41,40 @@ public class DesktopFile extends JComponent {
 					else if (e.getClickCount() == 1)
 						selected = true;
 				}
+				repaint();
 			}
 
 			public void mouseEntered(MouseEvent e) {
 				selectChance = true;
+				box.setVisible(true);
+				repaint();
 			}
 
 			public void mouseExited(MouseEvent e) {
 				selectChance = false;
 				selected = false;
+				box.setVisible(false);
+				repaint();
 			}
 
 		};
 		addMouseListener(adapter);
 	}
 
-	public void paint(Graphics g) {
-		box.setSelected(selected);
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.BLACK);
 		g.drawString(file.getName(), getWidth() / 2 - g.getFontMetrics().stringWidth(file.getName()) / 2,
 				getHeight() / 2 - g.getFontMetrics().getHeight());
 		if (selectChance == true) {
-			g.setColor(Color.ORANGE);
-			g.fillRect(4, 4, getWidth() / 4, getHeight() / 4);
-			g.setColor(Color.BLACK);
-			g.drawRect(4, 4, getWidth() / 4, getHeight() / 4);
+			box.setSelected(false);
 		}
 		if (selected == true) {
 			if (selectChance == true)
 				selectChance = false;
-			g.translate(3, 12);
-			box.setLocation(0, 4);
-			box.setSize(4, 4);
-			box.paint(g);
-			g.translate(-3, -12);
+			box.setSelected(true);
 		}
 	}
 

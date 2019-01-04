@@ -18,8 +18,10 @@ public class Cursors {
 	
 	static {
 		try {
-			System.out.println(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/DefaultCursor.png")).getWidth());
+			//System.out.println(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/DefaultCursor.png")).getWidth());
 			DEFAULT_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Cursors/DefaultCursor.png")), new Point(0, 0), "Default");
+			System.out.println(DEFAULT_CURSOR.getName());
+			System.out.println(DEFAULT_CURSOR.getClass());
 		} catch (HeadlessException | IndexOutOfBoundsException | IOException e) {
 			e.printStackTrace();
 		}

@@ -138,6 +138,7 @@ public class Desktop extends JDesktopPane {
 		try {
 			startButton = new Button();
 			startButton.setSize(32, 32);
+			startButton.setFullIcon(true);
 			startButton.setIcon(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/JEternalLogo128.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -153,13 +154,14 @@ public class Desktop extends JDesktopPane {
 			}
 
 		});
-		setCursor(Cursors.DEFAULT_CURSOR);
+		System.out.println(java.awt.BorderLayout.CENTER);
+		//setCursor(Cursors.DEFAULT_CURSOR);
 		File desktop = new File("Desktop");
 		File[] files = desktop.listFiles();
 		int x = 10;
 		int y = 75;
 		for (File file : files) {
-			if (x > 160) {
+			if (x > 300) {
 				y += 85;
 				x = 10;
 			}
@@ -289,12 +291,12 @@ public class Desktop extends JDesktopPane {
 			g.setColor(Color.BLUE);
 		}
 
-		Component c = lowestComponentAt(this, mouseX, mouseY);
+		//Component c = lowestComponentAt(this, mouseX, mouseY);
 		
 		//System.out.println(c);
-		if (c instanceof JEComponent) {
-			g.drawImage(((JEComponent) c).getLightWeightCursor(), mouseX, mouseY, null);
-		}
+		//if (c instanceof JEComponent) {
+		//	g.drawImage(((JEComponent) c).getLightWeightCursor(), mouseX, mouseY, null);
+		//}
 	}
 
 }
