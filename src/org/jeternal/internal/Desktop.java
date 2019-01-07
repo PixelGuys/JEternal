@@ -8,9 +8,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -18,25 +17,21 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
+import org.jeternal.internal.eef.EEFFile;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.components.Button;
-import org.jeternal.sdk.components.Cursors;
-import org.jeternal.sdk.components.JEComponent;
 import org.jeternal.sdk.components.Window;
 
 public class Desktop extends JDesktopPane {
@@ -168,6 +163,22 @@ public class Desktop extends JDesktopPane {
 			DesktopFile component = new DesktopFile(file);
 			component.setLocation(x, y);
 			component.setSize(75, 75);
+			try {
+				Image icon = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/FileDefaultIcon.png"));
+				String appName = Jeternal.getFileAssoc(file);
+				if (appName != null) {
+					if (appName.equals("Launch as EEF")) {
+						EEFFile ef = new EEFFile(file);
+						Image ic = ef.getIcon();
+						if (ic != null) {
+							icon = ic;
+						}
+					}
+				}
+				component.icon = icon;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			add(component);
 			x += component.getWidth() + 20;
 		}
@@ -290,7 +301,8 @@ public class Desktop extends JDesktopPane {
 			g.fillRect(fX, fY, selectWidth, selectHeight);
 			g.setColor(Color.BLUE);
 		}
-
+		g.setColor(Color.white);
+		g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
 		//Component c = lowestComponentAt(this, mouseX, mouseY);
 		
 		//System.out.println(c);

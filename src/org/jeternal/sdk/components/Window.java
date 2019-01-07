@@ -82,30 +82,34 @@ public class Window extends JInternalFrame {
 		windowButton = new Button();
 		icon = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
 		windowButton.setIcon(icon);
-		setFrameIcon(new Icon() {
-
-			@Override
-			public void paintIcon(Component c, Graphics g, int x, int y) {
-				g.drawImage(icon, x, y, c);
-			}
-
-			@Override
-			public int getIconWidth() {
-				return icon.getWidth(null);
-			}
-
-			@Override
-			public int getIconHeight() {
-				return icon.getHeight(null);
-			}
-			
-		});
-		setDesktopIcon(new JDesktopIcon(this));
+//		setFrameIcon(new Icon() {
+//
+//			@Override
+//			public void paintIcon(Component c, Graphics g, int x, int y) {
+//				g.drawImage(icon, x, y, c);
+//			}
+//
+//			@Override
+//			public int getIconWidth() {
+//				return icon.getWidth(null);
+//			}
+//
+//			@Override
+//			public int getIconHeight() {
+//				return icon.getHeight(null);
+//			}
+//			
+//		});
+		//setDesktopIcon(new JDesktopIcon(this));
 		windowButton.setPreferredSize(new Dimension(94, windowButton.getPreferredSize().width));
 		
 		windowButton.setOnAction(new Runnable() {
 			public void run() {
 				try {
+					if (!Window.this.isFocusOwner() && !isIcon()) {
+						Window.this.grabFocus();
+						return;
+					}
 					setIcon(!isIcon());
 				} catch (PropertyVetoException e) {
 					e.printStackTrace();
@@ -211,7 +215,6 @@ public class Window extends JInternalFrame {
 		System.out.println(icon);
 		//setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.BLACK));
 		setSize(256, 256);
-		
 		//setMinimumSize(new Dimension(98, 46));
 		setVisible(true);
 		

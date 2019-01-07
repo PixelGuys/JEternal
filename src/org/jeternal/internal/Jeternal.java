@@ -47,7 +47,7 @@ public class Jeternal {
 
 	private static Frame jEternal;
 	public static Desktop desktop;
-	private final static String jEternalVersion = "19.01-pre";
+	public final static String jEternalVersion = "19.01-pre";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
@@ -133,22 +133,22 @@ public class Jeternal {
 		ext2App.put("tiff", "Pictures Viewer");
 		ext2App.put("jpg", "Pictures Viewer");
 		ext2App.put("jpeg", "Pictures Viewer");
-		ext2App.put("uac", "Settings");
+		//ext2App.put("uac", "Settings");
+		ext2App.put("eef", "Launch as EEF");
 		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
-		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%"); // EternalELF is an application, implemented by default in Jeternal
+		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%");
 		//app2PathMap.put("Settings", "/System/SysApps/Settings.eef");
-		try {
-			//UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (Throwable e2) {
-			e2.printStackTrace();
-		}
 		jEternal = new JFrame();
 		jEternal.setTitle("JEternal " + jEternalVersion);
 		jEternal.setSize(440, 180);
 		jEternal.setLocationRelativeTo(null);
+		
+		// [[Fullscreen]]
 		//jEternal.setUndecorated(true);
 		//jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		// [[END]]
+		
 		jEternal.setBackground(Color.BLACK);
 		jEternal.addWindowListener(new WindowAdapter() {
 
@@ -211,10 +211,8 @@ public class Jeternal {
 			String str = new String(instIn.readAllBytes());
 			Scanner sc = new Scanner(str);
 			String curLabel = "";
-			steps = 0;
-			sc.findAll(Pattern.compile("(\\r\\n|\\r|\\n)")).iterator().forEachRemaining((mr) -> {
-				steps++;
-			});
+			//steps = 0;
+			steps = (int) sc.findAll(Pattern.compile("(\\r\\n|\\r|\\n)")).count();
 			sc.close();
 			sc = new Scanner(str);
 			bar.setMaximum(steps);
@@ -269,8 +267,7 @@ public class Jeternal {
 	public static void launchEEF(File file) {
 		try {
 			EEFFile f = new EEFFile(file);
-			f.close();
-			EEFRunner runner = EEFRunner.launch(file);
+			EEFRunner runner = EEFRunner.launch(f);
 			runner.start();
 		} catch (IOException e) {
 			Window window = new Window();
@@ -283,6 +280,17 @@ public class Jeternal {
 			desktop.add(window);
 			e.printStackTrace();
 		}
+	}
+	
+	public static String getFileAssoc(File file) {
+		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
+		String appName = null;
+		for (String ext : ext2App.keySet()) {
+			if (ext.equals(fileExt)) {
+				appName = ext2App.get(ext);
+			}
+		}
+		return appName;
 	}
 	
 	public static void shell(File file) {
@@ -301,7 +309,7 @@ public class Jeternal {
 					return;
 				}
 				try {
-					EEFRunner runner = EEFRunner.launch(new File("." + appPath), file);
+					EEFRunner runner = EEFRunner.launch(new EEFFile(new File("." + appPath)), file);
 					runner.start();
 				} catch (IOException e1) {
 					Window window = new Window();

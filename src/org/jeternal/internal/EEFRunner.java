@@ -1,5 +1,6 @@
 package org.jeternal.internal;
 
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,7 @@ import java.io.Reader;
 import java.util.function.Function;
 import java.util.zip.ZipEntry;
 
+import javax.imageio.ImageIO;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -26,6 +28,7 @@ public class EEFRunner {
 
 	private Object[] argv;
 	private NashornScriptEngine engine;
+	private Image icon;
 	
 	static class DefaultClassFilter implements ClassFilter {
 
@@ -36,7 +39,7 @@ public class EEFRunner {
 		
 	}
 	
-	public static EEFRunner launch(File file, Object... argv) throws IOException {
+	public static EEFRunner launch(EEFFile file, Object... argv) throws IOException {
 		EEFRunner runner = new EEFRunner(file);
 		runner.argv = argv;
 		return runner;
@@ -70,6 +73,10 @@ public class EEFRunner {
 	private File file;
 	private EEFFile eef;
 	
+	public Image getIcon() {
+		return icon;
+	}
+	
 	void runJS(ZipEntry entry) throws IOException {
 		runJS(eef.getInputStream(entry));
 	}
@@ -91,6 +98,7 @@ public class EEFRunner {
 			});
 			// Start
 			engine.eval(new InputStreamReader(in));
+			
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
@@ -102,9 +110,12 @@ public class EEFRunner {
 		Thread th = new Thread() {
 			public void run() {
 				try {
-					eef = new EEFFile(file);
 					Manifest mf = eef.getManifest();
 					ZipEntry main = eef.getEntry("js/main.js");
+					ZipEntry icon = eef.getEntry("res/icon.png");
+					if (icon != null) {
+						EEFRunner.this.icon = ImageIO.read(eef.getInputStream(icon));
+					}
 					runJS(main);
 					eef.close();
 				} catch (IOException e) {
@@ -117,8 +128,8 @@ public class EEFRunner {
 		th.start();
 	}
 
-	EEFRunner(File file) throws IOException {
-		this.file = file;
+	EEFRunner(EEFFile file) throws IOException {
+		this.eef = file;
 	}
 
 }
