@@ -12,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -115,7 +116,10 @@ public class UI {
 		if (name.equals("MenuItem")) {
 			return new JMenuItem();
 		}
-		
+		if (name.equals("FileChooser")) {
+			return new JFileChooser();
+			
+		}
 		return null;
 	}
 	
