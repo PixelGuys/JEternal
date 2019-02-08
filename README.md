@@ -11,10 +11,14 @@ And here is one during February the 8th 2019 (pre-19.04), using Metal look and f
 
 
 Logon:
+
+
 ![Example Picture of JEternal (pre-19.04)](https://gamexmc.000webhostapp.com/misc/JEternalExample3.png)
 
 
 Desktop:
+
+
 ![Example Picture of JEternal (pre-19.04) 2](https://gamexmc.000webhostapp.com/misc/JEternalExample2.png)
 
 ## Credits
