@@ -70,6 +70,17 @@ public class Jeternal {
 		}
 	}
 
+	public static void init() {
+		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
+		try {
+			lib.loadComponent("io_system").comp_("init");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+			e1.printStackTrace();
+		}
+		IO_LIB = lib;
+	}
+
 	public static void login(String username, char[] password) {
 
 		try {
@@ -97,14 +108,7 @@ public class Jeternal {
 		jEternal.add(desktop);
 		jEternal.setTitle("JEternal: " + username);
 		jEternal.revalidate();
-		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
-		try {
-			lib.loadComponent("io_system").comp_("init");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
-		}
-		IO_LIB = lib;
+		init();
 	}
 
 	public static void main(String[] args) {
@@ -168,6 +172,7 @@ public class Jeternal {
 			jEternal.setSize(1280, 720);
 			jEternal.setLocationRelativeTo(null);
 			jEternal.add(desktop);
+			init();
 		}
 		jEternal.setVisible(true);
 
@@ -277,10 +282,10 @@ public class Jeternal {
 
 	}
 
-	public static void launchEEF(File file) {
+	public static void launchEEF(File file, Object... argv) {
 		try {
 			EEFFile f = new EEFFile(file);
-			EEFRunner runner = EEFRunner.launch(f);
+			EEFRunner runner = EEFRunner.launch(f, argv);
 			runner.start();
 		} catch (IOException e) {
 			Window window = new Window();

@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -102,24 +103,51 @@ public class UI {
 		};
 	}
 
+	int fsm;
+
+	public int getFullscreenMode() {
+		return fsm;
+	}
+
 	/**
 	 * 0 = windowed,
 	 * 1 = borderless,
 	 * 2 = exclusive
 	 * @param i
 	 */
-	public void setFullscreenMode(int i) {
+	public void setFullscreenMode(int i, DisplayMode req) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice gd = ge.getDefaultScreenDevice();
 		if (i == 0 || i == 1) {
 			gd.setFullScreenWindow(null);
-		} else {
-			gd.setFullScreenWindow(Jeternal.jEternal);
-			for (DisplayMode mode : gd.getDisplayModes()) {
-				System.out.println(mode.getWidth()+"x"+mode.getHeight()+"#"+mode.getBitDepth()+"@"+mode.getRefreshRate());
+			if (i == 1) {
+				Jeternal.jEternal.dispose();
+				Jeternal.jEternal.setUndecorated(true);
+				Jeternal.jEternal.setVisible(true);
+				Jeternal.jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			}
-			gd.setDisplayMode(new DisplayMode(1280, 720, 32, 60));
 		}
+		if (i != 1) {
+			if (fsm == 1) {
+				Jeternal.jEternal.setExtendedState(JFrame.NORMAL);
+				Jeternal.jEternal.dispose();
+				Jeternal.jEternal.setUndecorated(false);
+				Jeternal.jEternal.setVisible(true);
+			}
+		}
+		if (i == 2) {
+			gd.setFullScreenWindow(Jeternal.jEternal);
+			if (req != null) {
+				gd.setDisplayMode(req);
+			}
+		}
+		fsm = i;
+	}
+
+	public DisplayMode[] getDisplayModes() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		return gd.getDisplayModes();
 	}
 
 	public KeyStroke getKeyStroke(String ks) {
