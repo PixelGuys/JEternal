@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.Provider;
 import java.security.Security;
@@ -109,7 +111,7 @@ public class Jeternal {
 		//overwriteAccount("Zen1th", "testpass".getBytes());
 
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if (info.getName().equals("Metal")) {
+			if (info.getName().equals("CDE/Motif")) {
 				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e) {
@@ -159,7 +161,11 @@ public class Jeternal {
 
 		});
 		login = new LoginScreen();
-		jEternal.add(login);
+		if (Files.exists(Paths.get("System/account.uac"))) {
+			jEternal.add(login);
+		} else {
+			jEternal.add(desktop);
+		}
 		jEternal.setVisible(true);
 
 		Thread th = new Thread() {

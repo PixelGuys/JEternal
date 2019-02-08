@@ -7,7 +7,6 @@ MKDIR System/Resources
 MKDIR System/Resources/Images
 MKDIR System/Resources/Images/Wallpapers
 DOWN System/Resources/Images/Wallpapers/JEternalBackground.png
-DOWN System/Resources/Images/Wallpapers/EpicDragon.png
 MKDIR System/Resources/Images/Cursors
 DOWN System/Resources/Images/Cursors/DefaultCursor.png
 DOWN System/Resources/Images/Cursors/ActionCursor.png
@@ -20,6 +19,7 @@ LABEL Downloading system applications..
 MKDIR System/SysApps
 DOWN System/SysApps/Pictures.eef
 DOWN System/SysApps/settings.eef
+DOWN System/SysApps/notepad.eef
 LABEL Download system libraries..
 MKDIR System/Libraries
 LABEL Making some system directories
