@@ -1,8 +1,12 @@
 package org.jeternal.internal.eef.js;
 
 import java.awt.Color;
+import java.awt.DisplayMode;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,9 +14,13 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -23,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.event.ListDataListener;
 
 import org.jeternal.internal.Jeternal;
 import org.jeternal.sdk.components.Window;
@@ -51,6 +60,34 @@ public class UI {
 		}
 	}
 	
+	public static class ChoiceBox extends JComboBox<Object> {
+		
+		private Object[] o;
+		
+		public void setValues(Object[] values) {
+			o = values;
+			revalidate();
+			repaint();
+		}
+		
+		public ChoiceBox() {
+			setModel(new DefaultComboBoxModel<Object>() {
+
+				@Override
+				public int getSize() {
+					return o.length;
+				}
+
+				@Override
+				public Object getElementAt(int index) {
+					return o[index];
+				}
+				
+			});
+		}
+		
+	}
+	
 	public Window createWindow(String appID) {
 		Window window = new Window();
 		window.setAppID(appID);
@@ -67,6 +104,26 @@ public class UI {
 			}
 			
 		};
+	}
+	
+	/**
+	 * 0 = windowed,
+	 * 1 = borderless,
+	 * 2 = exclusive
+	 * @param i
+	 */
+	public void setFullscreenMode(int i) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		if (i == 0 || i == 1) {
+			gd.setFullScreenWindow(null);
+		} else {
+			gd.setFullScreenWindow(Jeternal.jEternal);
+			for (DisplayMode mode : gd.getDisplayModes()) {
+				System.out.println(mode.getWidth()+"x"+mode.getHeight()+"#"+mode.getBitDepth()+"@"+mode.getRefreshRate());
+			}
+			gd.setDisplayMode(new DisplayMode(800, 600, 32, 60));
+		}
 	}
 	
 	public KeyStroke getKeyStroke(String ks) {
@@ -119,6 +176,9 @@ public class UI {
 		if (name.equals("FileChooser")) {
 			return new JFileChooser();
 			
+		}
+		if (name.equals("ChoiceBox")) {
+			return new ChoiceBox();
 		}
 		return null;
 	}

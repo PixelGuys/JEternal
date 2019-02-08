@@ -42,7 +42,7 @@ public class Misc {
 	}
 	
 	public String generateAppID() {
-		return Integer.toHexString(new Random().nextInt());
+		return Long.toHexString(new Random().nextLong());
 	}
 	
 	public void registerAppID(String appID) {

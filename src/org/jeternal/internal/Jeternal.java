@@ -18,6 +18,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
+import java.security.Security;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -45,9 +47,9 @@ import org.jeternal.sdk.components.Window;
 
 public class Jeternal {
 
-	private static Frame jEternal;
+	public static JFrame jEternal;
 	public static Desktop desktop;
-	public final static String jEternalVersion = "19.01-pre";
+	public final static String jEternalVersion = "19.04-beta";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
@@ -126,6 +128,11 @@ public class Jeternal {
 			}
 		}
 		
+		System.out.println("All security providers:");
+		for (Provider p : Security.getProviders()) {
+			System.out.println("\t- " + p.getName() + ": " + p.getInfo());
+		}
+		
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
@@ -133,12 +140,15 @@ public class Jeternal {
 		ext2App.put("tiff", "Pictures Viewer");
 		ext2App.put("jpg", "Pictures Viewer");
 		ext2App.put("jpeg", "Pictures Viewer");
+		ext2App.put("txt", "Notepad");
+		ext2App.put("js", "Notepad");
 		//ext2App.put("uac", "Settings");
 		ext2App.put("eef", "Launch as EEF");
 		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%");
-		//app2PathMap.put("Settings", "/System/SysApps/Settings.eef");
+		//app2PathMap.put("Settings", "/System/SysApps/settings.eef");
+		app2PathMap.put("Notepad", "/System/SysApps/notepad.eef");
 		jEternal = new JFrame();
 		jEternal.setTitle("JEternal " + jEternalVersion);
 		jEternal.setSize(440, 180);
@@ -196,7 +206,6 @@ public class Jeternal {
 		if (!new File("System/Components").exists()) {
 			return;
 		}
-		
 		
 
 	}

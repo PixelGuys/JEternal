@@ -139,7 +139,7 @@ public class Desktop extends JDesktopPane {
 			e.printStackTrace();
 		}
 		
-		//add(utilButton);
+		add(utilButton);
 		add(startButton);
 		utilButton.setOnAction(new Runnable() {
 

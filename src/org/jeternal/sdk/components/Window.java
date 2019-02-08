@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.FocusEvent.Cause;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyVetoException;
 
@@ -106,8 +107,8 @@ public class Window extends JInternalFrame {
 		windowButton.setOnAction(new Runnable() {
 			public void run() {
 				try {
-					if (!Window.this.isFocusOwner() && !isIcon()) {
-						Window.this.grabFocus();
+					if (Window.this.getFocusOwner() == null && !isIcon()) {
+						Window.this.requestFocusInWindow(Cause.MOUSE_EVENT);
 						return;
 					}
 					setIcon(!isIcon());
