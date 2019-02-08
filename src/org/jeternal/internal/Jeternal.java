@@ -1,8 +1,6 @@
 package org.jeternal.internal;
 
 import java.awt.Color;
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -13,11 +11,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.HashMap;
@@ -31,14 +26,9 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListDataListener;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
-
 import org.jeternal.internal.eef.EEFFile;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.SystemComponent;
@@ -64,7 +54,7 @@ public class Jeternal {
 		}
 		return bytes;
 	}
-	
+
 	public static void overwriteAccount(String username, byte[] newPass) {
 		try {
 			ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("System/account.uac"));
@@ -77,13 +67,13 @@ public class Jeternal {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void login(String username, char[] password) {
-		
+
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA3-256");
 			byte[] d = digest.digest(charToByteArray(password));
-			
+
 			ObjectInputStream is = new ObjectInputStream(new FileInputStream("System/account.uac"));
 			String un = (String) is.readObject();
 			byte[] dc = (byte[]) is.readObject();
@@ -97,7 +87,7 @@ public class Jeternal {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(jEternal, "Encryption or Account error!");
 		}
-		
+
 		desktop = new Desktop();
 		jEternal.setSize(1280, 720);
 		jEternal.setLocationRelativeTo(null);
@@ -114,12 +104,12 @@ public class Jeternal {
 		}
 		IO_LIB = lib;
 	}
-	
+
 	public static void main(String[] args) {
 		//overwriteAccount("Zen1th", "testpass".getBytes());
-		
+
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if (info.getName().equals("CDE/Motif")) {
+			if (info.getName().equals("Metal")) {
 				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e) {
@@ -127,12 +117,12 @@ public class Jeternal {
 				}
 			}
 		}
-		
+
 		System.out.println("All security providers:");
 		for (Provider p : Security.getProviders()) {
 			System.out.println("\t- " + p.getName() + ": " + p.getInfo());
 		}
-		
+
 		System.out.println(
 				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
 						+ " environment. Min. Java Version: 1.5. ");
@@ -153,15 +143,16 @@ public class Jeternal {
 		jEternal.setTitle("JEternal " + jEternalVersion);
 		jEternal.setSize(440, 180);
 		jEternal.setLocationRelativeTo(null);
-		
+
 		// [[Fullscreen]]
 		//jEternal.setUndecorated(true);
 		//jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		// [[END]]
-		
+
 		jEternal.setBackground(Color.BLACK);
 		jEternal.addWindowListener(new WindowAdapter() {
 
+			@Override
 			public void windowClosing(WindowEvent e) {
 				shutdown();
 			}
@@ -172,6 +163,7 @@ public class Jeternal {
 		jEternal.setVisible(true);
 
 		Thread th = new Thread() {
+			@Override
 			public void run() {
 				long lastRenderTime = System.nanoTime();
 				int frames = 0;
@@ -186,7 +178,9 @@ public class Jeternal {
 					}
 					updatetime = System.currentTimeMillis() - updatetime;
 					int sleeptime = (1000 / 24) - (int) updatetime;
-					if (sleeptime < 0) sleeptime = 0;
+					if (sleeptime < 0) {
+						sleeptime = 0;
+					}
 					try {
 						Thread.sleep(sleeptime);
 					} catch (InterruptedException e) {
@@ -194,7 +188,7 @@ public class Jeternal {
 					}
 					if (System.currentTimeMillis() - timer > 1000) {
 						timer += 1000;
-					//	System.out.println(frames + " ips");
+						//	System.out.println(frames + " ips");
 						frames = 0;
 					}
 				}
@@ -202,16 +196,16 @@ public class Jeternal {
 		};
 		th.setName("Eternal Update Thread");
 		th.start();
-		
+
 		if (!new File("System/Components").exists()) {
 			return;
 		}
-		
+
 
 	}
-	
+
 	static int steps;
-	
+
 	static void install(JLabel state, JProgressBar bar, JButton exit) {
 		try {
 			String baseURL = "https://raw.githubusercontent.com/MunirkSoft/JEternal/master";
@@ -265,14 +259,15 @@ public class Jeternal {
 	}
 
 	static void paint() {
-		if (desktop != null)
+		if (desktop != null) {
 			desktop.repaint();
+		}
 	}
 
 	static void update() {
 
 	}
-	
+
 	public static void launchEEF(File file) {
 		try {
 			EEFFile f = new EEFFile(file);
@@ -290,7 +285,7 @@ public class Jeternal {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static String getFileAssoc(File file) {
 		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
 		String appName = null;
@@ -301,7 +296,7 @@ public class Jeternal {
 		}
 		return appName;
 	}
-	
+
 	public static void shell(File file) {
 		if (file.getName().endsWith(".eef")) {
 			launchEEF(file);
@@ -340,7 +335,8 @@ public class Jeternal {
 		list.setModel(new javax.swing.ListModel<String>() {
 
 			private static final long serialVersionUID = 1L;
-			
+
+			@Override
 			public String getElementAt(int index) {
 				int emp = 0;
 				for (String key : app2PathMap.keySet()) {
@@ -354,7 +350,7 @@ public class Jeternal {
 
 			@Override
 			public void addListDataListener(ListDataListener l) {
-				
+
 			}
 
 			@Override
@@ -364,12 +360,13 @@ public class Jeternal {
 
 			@Override
 			public void removeListDataListener(ListDataListener l) {
-				
+
 			}
 
-			
+
 		});
 		list.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if (e.getClickCount() == 2) {
 					if (list.getSelectedValue() != null) {

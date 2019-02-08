@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -14,13 +13,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,25 +28,24 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import javax.swing.event.ListDataListener;
-
 import org.jeternal.internal.Jeternal;
 import org.jeternal.sdk.components.Window;
 
 public class UI {
 
 	public static class ImageView extends JPanel {
-		
+
 		private Image image;
-		
+
 		public void setImage(Image image) {
 			this.image = image;
 		}
-		
+
 		public Image getImage() {
 			return image;
 		}
-		
+
+		@Override
 		public void paint(Graphics g) {
 			super.paint(g);
 			g.setColor(Color.BLACK);
@@ -59,17 +55,17 @@ public class UI {
 			}
 		}
 	}
-	
+
 	public static class ChoiceBox extends JComboBox<Object> {
-		
+
 		private Object[] o;
-		
+
 		public void setValues(Object[] values) {
 			o = values;
 			revalidate();
 			repaint();
 		}
-		
+
 		public ChoiceBox() {
 			setModel(new DefaultComboBoxModel<Object>() {
 
@@ -82,19 +78,19 @@ public class UI {
 				public Object getElementAt(int index) {
 					return o[index];
 				}
-				
+
 			});
 		}
-		
+
 	}
-	
+
 	public Window createWindow(String appID) {
 		Window window = new Window();
 		window.setAppID(appID);
 		Jeternal.desktop.add(window);
 		return window;
 	}
-	
+
 	public ActionListener toActionListener(Runnable run) {
 		return new ActionListener() {
 
@@ -102,10 +98,10 @@ public class UI {
 			public void actionPerformed(ActionEvent e) {
 				run.run();
 			}
-			
+
 		};
 	}
-	
+
 	/**
 	 * 0 = windowed,
 	 * 1 = borderless,
@@ -122,22 +118,22 @@ public class UI {
 			for (DisplayMode mode : gd.getDisplayModes()) {
 				System.out.println(mode.getWidth()+"x"+mode.getHeight()+"#"+mode.getBitDepth()+"@"+mode.getRefreshRate());
 			}
-			gd.setDisplayMode(new DisplayMode(800, 600, 32, 60));
+			gd.setDisplayMode(new DisplayMode(1280, 720, 32, 60));
 		}
 	}
-	
+
 	public KeyStroke getKeyStroke(String ks) {
 		return KeyStroke.getKeyStroke(ks);
 	}
-	
+
 	public int getExtendedKeyCode(String s) {
 		return KeyEvent.getExtendedKeyCodeForChar(s.toCharArray()[0]);
 	}
-	
+
 	public int getExtendedKeyCodeChar(char ch) {
 		return KeyEvent.getExtendedKeyCodeForChar(ch);
 	}
-	
+
 	public Object createComponent(String name, Object... args) {
 		if (name.equals("Button")) {
 			return new JButton("{jeternal.default.button}");
@@ -175,14 +171,14 @@ public class UI {
 		}
 		if (name.equals("FileChooser")) {
 			return new JFileChooser();
-			
+
 		}
 		if (name.equals("ChoiceBox")) {
 			return new ChoiceBox();
 		}
 		return null;
 	}
-	
+
 	public Image readImage(String file) {
 		try {
 			return ImageIO.read(new File(file));
@@ -190,5 +186,5 @@ public class UI {
 			return null;
 		}
 	}
-	
+
 }
