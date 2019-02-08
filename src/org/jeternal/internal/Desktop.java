@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -47,7 +46,7 @@ public class Desktop extends JDesktopPane {
 
 	private BufferedImage desktopImage;
 	private JPanel taskBar;
-	
+
 	private BufferedImage currentCursor;
 
 	void missing_() {
@@ -59,7 +58,7 @@ public class Desktop extends JDesktopPane {
 		frame.setLayout(new BorderLayout());
 		JTextArea area = new JTextArea(
 				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) !\n"
-				+ "Now let's download system resources and libraries..\n(Only supporting local repository)"
+						+ "Now let's download system resources and libraries.."
 				);
 		area.setEditable(false);
 		frame.add(BorderLayout.CENTER, area);
@@ -96,6 +95,7 @@ public class Desktop extends JDesktopPane {
 				frame.hide();
 				remove(frame);
 				Thread th = new Thread() {
+					@Override
 					public void run() {
 						Jeternal.install(state, bar, quit);
 					}
@@ -129,7 +129,7 @@ public class Desktop extends JDesktopPane {
 		utilButton = new Button();
 		utilButton.setText("Shortcutse");
 		utilButton.setSize(70, 30);
-		
+
 		try {
 			startButton = new Button();
 			startButton.setSize(32, 32);
@@ -138,7 +138,7 @@ public class Desktop extends JDesktopPane {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		add(utilButton);
 		add(startButton);
 		utilButton.setOnAction(new Runnable() {
@@ -190,7 +190,7 @@ public class Desktop extends JDesktopPane {
 	}
 
 	int mouseX, mouseY;
-	
+
 	@SuppressWarnings("deprecation")
 	Desktop() {
 		setBackground(Color.WHITE);
@@ -236,12 +236,14 @@ public class Desktop extends JDesktopPane {
 					selectY = arg0.getY();
 				}
 			}
-			
+
+			@Override
 			public void mouseMoved(MouseEvent e) {
 				mouseX = e.getX();
 				mouseY = e.getY();
 			}
 
+			@Override
 			public void mouseReleased(MouseEvent arg0) {
 				selectX = -1;
 				selectY = -1;
@@ -265,7 +267,7 @@ public class Desktop extends JDesktopPane {
 		super.remove(w);
 		taskBar.remove(w.getWindowButton());
 	}
-	
+
 	public Component lowestComponentAt(Container parent, int x, int y) {
 		Component c = SwingUtilities.getDeepestComponentAt(parent, x, y);
 		if (c != null && c != parent) {
@@ -280,11 +282,13 @@ public class Desktop extends JDesktopPane {
 		return c;
 	}
 
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g);
-		if (utilButton != null)
+		if (utilButton != null) {
 			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
+		}
 		if (startButton != null) {
 			startButton.setBounds(0, getHeight() - 42, 42, 42);
 		}
@@ -292,8 +296,9 @@ public class Desktop extends JDesktopPane {
 			taskBar.setLocation(new Point(42, getHeight() - 42));
 			taskBar.setSize(new Dimension(getWidth() - 42, 42));
 		}
-		if (desktopImage != null)
+		if (desktopImage != null) {
 			g.drawImage(desktopImage, 0, 0, getWidth(), getHeight(), null);
+		}
 		int fX = selectX;
 		int fY = selectY;
 		if (selectX != 0) {
@@ -302,9 +307,13 @@ public class Desktop extends JDesktopPane {
 			g.setColor(Color.BLUE);
 		}
 		g.setColor(Color.white);
-		g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
+		if (taskBar != null) {
+			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
+		} else {
+			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight());
+		}
 		//Component c = lowestComponentAt(this, mouseX, mouseY);
-		
+
 		//System.out.println(c);
 		//if (c instanceof JEComponent) {
 		//	g.drawImage(((JEComponent) c).getLightWeightCursor(), mouseX, mouseY, null);

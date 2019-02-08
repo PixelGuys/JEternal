@@ -160,10 +160,13 @@ public class Jeternal {
 			}
 
 		});
-		login = new LoginScreen();
 		if (Files.exists(Paths.get("System/account.uac"))) {
+			login = new LoginScreen();
 			jEternal.add(login);
 		} else {
+			desktop = new Desktop();
+			jEternal.setSize(1280, 720);
+			jEternal.setLocationRelativeTo(null);
 			jEternal.add(desktop);
 		}
 		jEternal.setVisible(true);
