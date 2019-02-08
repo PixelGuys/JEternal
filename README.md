@@ -7,8 +7,15 @@ Picture of it at one of it's first version, v381 (before YY.MM version system)
 The last 
 ![Example Picture of JEternal (build 381)](https://gamexmc.000webhostapp.com/misc/JEternalExample.png)
 
-And here is one during February the 8th 2019 (pre-19.04):
-![Example Picture of JEternal (pre-19.04)](https://gamexmc.000webhostapp.com/misc/JEternalExample2.png)
+And here is one during February the 8th 2019 (pre-19.04), using Metal look and feel:
+
+
+Logon:
+![Example Picture of JEternal (pre-19.04)](https://gamexmc.000webhostapp.com/misc/JEternalExample3.png)
+
+
+Desktop:
+![Example Picture of JEternal (pre-19.04) 2](https://gamexmc.000webhostapp.com/misc/JEternalExample2.png)
 
 ## Credits
 Cristi Flavian - Mega Designer
