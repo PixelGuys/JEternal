@@ -8,7 +8,8 @@ import static org.jeternal.internal.Jeternal.*;
 
 public class FileSystem {
 
-
+	static String rootDisk = System.getProperty("jeternal.rootfs", "vfs");
+	
 	public static org.jeternal.sdk.io.File loadFile(String path) {
 		if (IO_LIB == null) {
 			IO_LIB = SystemRessourcesLoader.loadSystemLibrary("io");
@@ -22,10 +23,13 @@ public class FileSystem {
 		org.jeternal.sdk.io.File file = new org.jeternal.sdk.io.File(path);
 		return file;
 	}
-
-	@Deprecated
-	public static File impl_loadFile(String path) {
-		File file = new File(path);
+	
+	public static File loadJavaFile(String path) {
+		File rd = new File(rootDisk);
+		if (!rd.exists()) {
+			rd.mkdirs();
+		}
+		File file = new File(rootDisk + "/" + path);
 		return file;
 	}
 
@@ -33,7 +37,10 @@ public class FileSystem {
 
 		public static SystemLibrary loadSystemLibrary(String path)
 		{
-			File file = new File("System/Components/"+path+".jar");
+			File file = FileSystem.loadJavaFile("System/Components/"+path+".jar");
+			if (!file.exists()) {
+				return null;
+			}
 			try {
 				return new SystemLibrary(file.toURI().toURL());
 			} catch (MalformedURLException e) {

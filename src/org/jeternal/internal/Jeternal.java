@@ -71,14 +71,17 @@ public class Jeternal {
 	}
 
 	public static void init() {
+		// io.jar
 		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
-		try {
-			lib.loadComponent("io_system").comp_("init");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
+		if (lib != null) {
+			try {
+				lib.loadComponent("io_system").comp_("init");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+				e1.printStackTrace();
+			}
+			IO_LIB = lib;
 		}
-		IO_LIB = lib;
 	}
 
 	public static void login(String username, char[] password) {
@@ -138,22 +141,14 @@ public class Jeternal {
 		ext2App.put("jpeg", "Pictures Viewer");
 		ext2App.put("txt", "Notepad");
 		ext2App.put("js", "Notepad");
-		//ext2App.put("uac", "Settings");
 		ext2App.put("eef", "Launch as EEF");
 		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
-		//app2PathMap.put("EternalELF", "/Programs/EternalELF/eternalelf.eef %1%");
-		//app2PathMap.put("Settings", "/System/SysApps/settings.eef");
 		app2PathMap.put("Notepad", "/System/SysApps/notepad.eef");
 		jEternal = new JFrame();
 		jEternal.setTitle("JEternal " + jEternalVersion);
 		jEternal.setSize(440, 180);
 		jEternal.setLocationRelativeTo(null);
-
-		// [[Fullscreen]]
-		//jEternal.setUndecorated(true);
-		//jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		// [[END]]
 
 		jEternal.setBackground(Color.BLACK);
 		jEternal.addWindowListener(new WindowAdapter() {
@@ -218,55 +213,7 @@ public class Jeternal {
 
 	}
 
-	static int steps;
-
-	static void install(JLabel state, JProgressBar bar, JButton exit) {
-		try {
-			String baseURL = "https://raw.githubusercontent.com/MunirkSoft/JEternal/master";
-			URL installInst = new URL(baseURL + "/install_content");
-			InputStream instIn = installInst.openStream();
-			String str = new String(instIn.readAllBytes());
-			Scanner sc = new Scanner(str);
-			String curLabel = "";
-			//steps = 0;
-			steps = (int) sc.findAll(Pattern.compile("(\\r\\n|\\r|\\n)")).count();
-			sc.close();
-			sc = new Scanner(str);
-			bar.setMaximum(steps);
-			while (sc.hasNext()) {
-				String line = sc.nextLine();
-				String[] args = line.split(" ");
-				if (args[0].equals("LABEL")) {
-					state.setText(line.replaceFirst("LABEL ", ""));
-					curLabel = line.replaceFirst("LABEL ", "");
-				}
-				if (args[0].equals("DOWN")) {
-					state.setText(curLabel + ": " + args[1]);
-					URL url = new URL(baseURL + "/" + args[1]);
-					InputStream in = url.openStream();
-					File file = new File(args[1]);
-					FileOutputStream out = new FileOutputStream(file);
-					in.transferTo(out);
-					out.close();
-					in.close();
-				}
-				if (args[0].equals("MKDIR")) {
-					File dir = new File(args[1]);
-					dir.mkdir();
-				}
-				bar.setValue(bar.getValue() + 1);
-				//Thread.sleep(1000); // only for step-by-step install
-			}
-			sc.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		state.setText("Finished ! Please restart JEternal");
-		bar.setValue(100);
-		exit.setEnabled(true);
-	}
-
-	static void shutdown() {
+	public static void shutdown() {
 		jEternal.dispose();
 		// TODO: Do exit finalizations
 		System.exit(0);
@@ -327,7 +274,7 @@ public class Jeternal {
 					return;
 				}
 				try {
-					EEFRunner runner = EEFRunner.launch(new EEFFile(new File("." + appPath)), file);
+					EEFRunner runner = EEFRunner.launch(new EEFFile(FileSystem.loadJavaFile("." + appPath)), file);
 					runner.start();
 				} catch (IOException e1) {
 					Window window = new Window();

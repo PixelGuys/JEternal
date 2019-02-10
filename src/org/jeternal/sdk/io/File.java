@@ -22,8 +22,8 @@ public class File {
 	public File(String path) {
 		try {
 			SystemComponent c = Jeternal.IO_LIB.loadComponent("file");
-			c.comp_("init", path);
-			this.path = path;
+			c.comp_("init", "vfs/" + path);
+			this.path = "vfs/" + path;
 			component = c;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException | NullPointerException e) {
@@ -57,6 +57,7 @@ public class File {
 	}
 	
 	public boolean exists() {
+		System.out.println("exists " + path);
 		return (boolean) component.comp_("exists");
 	}
 	

@@ -1,6 +1,5 @@
 package org.jeternal.internal;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -10,8 +9,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -19,19 +16,15 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import org.jeternal.internal.eef.EEFFile;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.components.Button;
 import org.jeternal.sdk.components.Window;
+import org.jeternal.update.InstallationProgram;
 
 public class Desktop extends JDesktopPane {
 
@@ -50,78 +43,8 @@ public class Desktop extends JDesktopPane {
 	private BufferedImage currentCursor;
 
 	void missing_() {
-		JInternalFrame frame = new JInternalFrame();
-		frame.setTitle("Welcome!");
-		frame.setIconifiable(true);
-		frame.setResizable(true);
-		frame.setMaximizable(true);
-		frame.setLayout(new BorderLayout());
-		JTextArea area = new JTextArea(
-				"Thanks for getting the virtual \"kernel\" (SDK + Base Code + UI) !\n"
-						+ "Now let's download system resources and libraries.."
-				);
-		area.setEditable(false);
-		frame.add(BorderLayout.CENTER, area);
-		JButton install = new JButton("Install");
-		install.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				install.setEnabled(false);
-				install.setText("Installing");
-				JInternalFrame fram = new JInternalFrame();
-				fram.setTitle("JEternal Installation");
-				fram.setResizable(true);
-				JLabel state = new JLabel("..");
-				fram.add(BorderLayout.NORTH, state);
-				JProgressBar bar = new JProgressBar();
-				fram.add(BorderLayout.CENTER, bar);
-				JButton quit = new JButton("Exit");
-				quit.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						Jeternal.shutdown();
-					}
-
-				});
-				quit.setEnabled(true);
-				fram.add(BorderLayout.SOUTH, quit);
-				fram.setIconifiable(true);
-				fram.setSize(340, 100);
-				fram.setLocation(400, 400);
-				fram.show();
-				add(fram);
-				frame.hide();
-				remove(frame);
-				Thread th = new Thread() {
-					@Override
-					public void run() {
-						Jeternal.install(state, bar, quit);
-					}
-				};
-				th.start();
-			}
-
-		});
-		JButton quit = new JButton("Quit");
-		quit.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				Jeternal.shutdown();
-			}
-
-		});
-		JPanel south = new JPanel();
-		south.add(install);
-		south.add(quit);
-		frame.add(BorderLayout.SOUTH, south);
-		frame.setSize(640, 320);
-		frame.setLocation(getWidth() / 2, getHeight() / 2);
-		frame.show();
 		setBackground(Color.BLUE);
-		add(frame);
+		add(InstallationProgram.createFrame());
 		revalidate();
 	}
 
@@ -134,24 +57,24 @@ public class Desktop extends JDesktopPane {
 			startButton = new Button();
 			startButton.setSize(32, 32);
 			startButton.setFullIcon(true);
-			startButton.setIcon(ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/JEternalLogo128.png")));
+			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo128.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		add(utilButton);
+		//		add(utilButton);
 		add(startButton);
 		utilButton.setOnAction(new Runnable() {
 
 			@Override
 			public void run() {
-				Jeternal.shell(new File("./System/SysApps/Shortcutse.eef"));
+				Jeternal.shell(FileSystem.loadJavaFile("./System/SysApps/Shortcutse.eef"));
 			}
 
 		});
 		System.out.println(java.awt.BorderLayout.CENTER);
 		//setCursor(Cursors.DEFAULT_CURSOR);
-		File desktop = new File("Desktop");
+		File desktop = FileSystem.loadJavaFile("Desktop");
 		File[] files = desktop.listFiles();
 		int x = 10;
 		int y = 75;
@@ -164,7 +87,7 @@ public class Desktop extends JDesktopPane {
 			component.setLocation(x, y);
 			component.setSize(75, 75);
 			try {
-				Image icon = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/FileDefaultIcon.png"));
+				Image icon = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/FileDefaultIcon.png"));
 				String appName = Jeternal.getFileAssoc(file);
 				if (appName != null) {
 					if (appName.equals("Launch as EEF")) {
@@ -173,6 +96,7 @@ public class Desktop extends JDesktopPane {
 						if (ic != null) {
 							icon = ic;
 						}
+						ef.close();
 					}
 				}
 				component.icon = icon;
@@ -190,34 +114,29 @@ public class Desktop extends JDesktopPane {
 	}
 
 	int mouseX, mouseY;
-
-	@SuppressWarnings("deprecation")
 	Desktop() {
+		Jeternal.desktop = this;
 		setBackground(Color.WHITE);
-		if (!new File("System/Components").exists()) {
+		
+		try {
+			SystemChecker.checkIntegrity();
+		} catch (IllegalStateException e) {
+			System.err.println(e.getMessage() + ", starting installation");
 			missing_();
 			return;
-		} else {
-			File[] files = new File("System/Components").listFiles();
-			if (files.length < 1) {
-
-				missing_();
-				return;
-			}
 		}
 
 		// Load
 		this.setBackground(Color.BLACK);
-		File desktop = FileSystem.impl_loadFile("Desktop");
+		File desktop = FileSystem.loadJavaFile("Desktop");
 		if (!desktop.exists()) {
 			desktop.mkdirs();
-			return;
 		}
 		try {
-			desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Wallpapers/CustomWallpaper.png"));
+			desktopImage = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/Wallpapers/CustomWallpaper.png"));
 		} catch (IOException e) {
 			try {
-				desktopImage = ImageIO.read(FileSystem.impl_loadFile("System/Resources/Images/Wallpapers/JEternalBackground.png"));
+				desktopImage = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/Wallpapers/JEternalBackground.png"));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
