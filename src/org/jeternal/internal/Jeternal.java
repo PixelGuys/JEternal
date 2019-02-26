@@ -258,7 +258,7 @@ public class Jeternal {
 		return appName;
 	}
 
-	public static void shell(File file) {
+	public static void shell(File file, Object... args) {
 		if (file.getName().endsWith(".eef")) {
 			launchEEF(file);
 			return;
@@ -274,7 +274,7 @@ public class Jeternal {
 					return;
 				}
 				try {
-					EEFRunner runner = EEFRunner.launch(new EEFFile(FileSystem.loadJavaFile("." + appPath)), file);
+					EEFRunner runner = EEFRunner.launch(new EEFFile(FileSystem.loadJavaFile("." + appPath)), file, args);
 					runner.start();
 				} catch (IOException e1) {
 					Window window = new Window();

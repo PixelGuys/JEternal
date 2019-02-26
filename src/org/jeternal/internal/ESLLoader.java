@@ -11,7 +11,7 @@ public class ESLLoader {
 
 	public static ESLFile load(NashornScriptEngine nse, File path) {
 		try {
-			return new ESLFile(nse, path);
+			return new ESLFile(nse, new File("vfs", path.toString()));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

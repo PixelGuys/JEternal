@@ -10,6 +10,8 @@ import java.io.File;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 public class DesktopFile extends JComponent {
 
@@ -18,6 +20,7 @@ public class DesktopFile extends JComponent {
 	private boolean selected;
 	private JCheckBox box;
 	public Image icon;
+	private JPopupMenu popup;
 
 	public boolean isSelected() {
 		return selected;
@@ -38,14 +41,28 @@ public class DesktopFile extends JComponent {
 		add(box);
 		box.setLocation(4, 12);
 		this.file = file;
+		
+		popup = new JPopupMenu();
+		JMenuItem open = new JMenuItem("Open");
+		JMenuItem props = new JMenuItem("Properties");
+		popup.add(open);
+		popup.addSeparator();
+		popup.add(props);
 		MouseAdapter adapter = new MouseAdapter() {
 
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON1) {
-					if (e.getClickCount() == 2)
+					if (e.getClickCount() == 2) {
 						Jeternal.shell(file);
-					else if (e.getClickCount() == 1)
-						selected = true;
+					}
+				}
+				if (e.getClickCount() == 1) {
+					selected = true;
+					repaint();
+					return;
+				}
+				if (e.getButton() == MouseEvent.BUTTON3 && selected) {
+					popup.show(DesktopFile.this, e.getX(), e.getY());
 				}
 				repaint();
 			}

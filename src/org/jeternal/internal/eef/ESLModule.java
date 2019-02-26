@@ -10,7 +10,7 @@ import javax.script.ScriptException;
 
 public class ESLModule {
 
-	private ArrayList<String> exportedClasses;
+	private ArrayList<String> exportedClasses = new ArrayList<>();
 	private ESLFile file;
 	
 	public ESLModule(ESLFile file, InputStream is) {

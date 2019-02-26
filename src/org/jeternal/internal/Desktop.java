@@ -17,7 +17,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.jeternal.internal.eef.EEFFile;
@@ -73,7 +77,20 @@ public class Desktop extends JDesktopPane {
 
 		});
 		System.out.println(java.awt.BorderLayout.CENTER);
-		//setCursor(Cursors.DEFAULT_CURSOR);
+		refreshDesktop();
+		taskBar = new JPanel();
+		taskBar.setBackground(new Color(100, 100, 157, 163));
+		taskBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		add(taskBar);
+
+	}
+	
+	void refreshDesktop() {
+		for (Component c : getComponents()) {
+			if (c instanceof DesktopFile) {
+				remove(c);
+			}
+		}
 		File desktop = FileSystem.loadJavaFile("Desktop");
 		File[] files = desktop.listFiles();
 		int x = 10;
@@ -106,11 +123,21 @@ public class Desktop extends JDesktopPane {
 			add(component);
 			x += component.getWidth() + 20;
 		}
-		taskBar = new JPanel();
-		taskBar.setBackground(new Color(100, 100, 157, 163));
-		taskBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-		add(taskBar);
-
+	}
+	
+	JPopupMenu createPopupMenu() {
+		JPopupMenu pm = new JPopupMenu();
+		JMenu mnew = new JMenu("New");
+		JMenuItem mnewT = new JMenuItem("Text File (.txt)");
+		mnew.add(mnewT);
+		JMenuItem ref = new JMenuItem("Refresh");
+		ref.addActionListener((event) -> {
+			refreshDesktop();
+		});
+		pm.add(ref);
+		pm.addSeparator();
+		pm.add(mnew);
+		return pm;
 	}
 
 	int mouseX, mouseY;
@@ -173,7 +200,7 @@ public class Desktop extends JDesktopPane {
 		};
 		this.addMouseMotionListener(adapter);
 		this.addMouseListener(adapter);
-
+		this.setComponentPopupMenu(createPopupMenu());
 		init0();
 	}
 
@@ -228,6 +255,14 @@ public class Desktop extends JDesktopPane {
 		g.setColor(Color.white);
 		if (taskBar != null) {
 			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
+			JInternalFrame frame = getSelectedFrame();
+			if (frame != null) {
+				g.drawString("Selected frame:", 0, 12);
+				g.drawString("X = " + frame.getX(), 0, 24);
+				g.drawString("Y = " + frame.getY(), 0, 36);
+				g.drawString("Width = " + frame.getWidth(), 0, 48);
+				g.drawString("Height = " + frame.getHeight(), 0, 60);
+			}
 		} else {
 			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight());
 		}
