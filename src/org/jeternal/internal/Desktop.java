@@ -81,11 +81,12 @@ public class Desktop extends JDesktopPane {
 		taskBar = new JPanel();
 		taskBar.setBackground(new Color(100, 100, 157, 163));
 		taskBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		taskBar.setOpaque(true);
 		add(taskBar);
 
 	}
 	
-	void refreshDesktop() {
+	public void refreshDesktop() {
 		for (Component c : getComponents()) {
 			if (c instanceof DesktopFile) {
 				remove(c);
@@ -207,11 +208,13 @@ public class Desktop extends JDesktopPane {
 	public void add(Window w) {
 		super.add(w);
 		taskBar.add(w.getWindowButton());
+		taskBar.repaint();
 	}
 
 	public void remove(Window w) {
 		super.remove(w);
 		taskBar.remove(w.getWindowButton());
+		taskBar.repaint();
 	}
 
 	public Component lowestComponentAt(Container parent, int x, int y) {
