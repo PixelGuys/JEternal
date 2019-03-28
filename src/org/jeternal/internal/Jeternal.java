@@ -115,10 +115,8 @@ public class Jeternal {
 	}
 
 	public static void main(String[] args) {
-		//overwriteAccount("Zen1th", "testpass".getBytes());
-
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if (info.getName().equals("CDE/Motif")) {
+			if (info.getName().equals("Metal")) {
 				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e) {

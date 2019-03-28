@@ -17,7 +17,7 @@ import org.jeternal.sdk.FileSystem;
 public class InstallationManager {
 
 	static int steps;
-	public static final String REPO_URL = "https://raw.githubusercontent.com/MunirkSoft/JEternal/master";
+	public static final String REPO_URL = "https://raw.githubusercontent.com/PixelGuys/JEternal/master";
 
 	public static String getLatestVersion() {
 		try {
