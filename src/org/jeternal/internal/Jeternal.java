@@ -261,6 +261,7 @@ public class Jeternal {
 			launchEEF(file);
 			return;
 		}
+		String filePath = file.toString().replace("vfs" + File.separatorChar, "");
 		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
 		for (String ext : ext2App.keySet()) {
 			if (ext.equals(fileExt)) {
@@ -272,7 +273,7 @@ public class Jeternal {
 					return;
 				}
 				try {
-					EEFRunner runner = EEFRunner.launch(new EEFFile(FileSystem.loadJavaFile("." + appPath)), file, args);
+					EEFRunner runner = EEFRunner.launch(new EEFFile(FileSystem.loadJavaFile("." + appPath)), filePath, args);
 					runner.start();
 				} catch (IOException e1) {
 					Window window = new Window();
