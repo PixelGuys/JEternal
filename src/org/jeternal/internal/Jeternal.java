@@ -91,7 +91,7 @@ public class Jeternal {
 			MessageDigest digest = MessageDigest.getInstance("SHA3-256");
 			byte[] d = digest.digest(charToByteArray(password));
 
-			ObjectInputStream is = new ObjectInputStream(new FileInputStream("System/account.uac"));
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("vfs/System/account.uac"));
 			String un = (String) is.readObject();
 			byte[] dc = (byte[]) is.readObject();
 			is.close();
@@ -117,7 +117,7 @@ public class Jeternal {
 
 	public static void main(String[] args) {
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if (info.getName().equals("Metal")) {
+			if (info.getName().equals("CDE/Motif")) {
 				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e) {

@@ -213,7 +213,7 @@ public class Window extends JInternalFrame {
 			public void internalFrameDeactivated(InternalFrameEvent e) {}
 			
 		});
-		System.out.println(icon);
+		//System.out.println(icon);
 		//setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.BLACK));
 		setSize(256, 256);
 		//setMinimumSize(new Dimension(98, 46));

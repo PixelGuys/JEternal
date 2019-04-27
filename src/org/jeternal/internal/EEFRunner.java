@@ -91,7 +91,7 @@ public class EEFRunner {
 		NashornScriptEngineFactory factory = new NashornScriptEngineFactory();
 		engine = (NashornScriptEngine) factory.getScriptEngine(new String[] {"--language=es6"}, EEFRunner.class.getClassLoader(), new DefaultClassFilter());
 		engine.getContext().setAttribute(ScriptEngine.ARGV, argv, ScriptContext.ENGINE_SCOPE);
-		System.out.println(engine);
+		//System.out.println(engine);
 		try {
 			engine.put("exit", null);
 			engine.put("quit", null);
