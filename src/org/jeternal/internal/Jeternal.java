@@ -32,6 +32,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ListDataListener;
 import org.jeternal.internal.eef.EEFFile;
+import org.jeternal.sdk.AudioSystem;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.SystemComponent;
 import org.jeternal.sdk.SystemLibrary;
@@ -157,7 +158,9 @@ public class Jeternal {
 			}
 
 		});
-		if (Files.exists(Paths.get("System/account.uac"))) {
+		AudioSystem.play(new File("vfs/System/Resources/Audio/startup.wav"));
+		jEternal.setVisible(true);
+		if (Files.exists(Paths.get("vfs/System/account.uac"))) {
 			login = new LoginScreen();
 			jEternal.add(login);
 		} else {
@@ -167,8 +170,8 @@ public class Jeternal {
 			jEternal.add(desktop);
 			init();
 		}
+		jEternal.dispose();
 		jEternal.setVisible(true);
-
 		Thread th = new Thread() {
 			@Override
 			public void run() {
@@ -203,12 +206,6 @@ public class Jeternal {
 		};
 		th.setName("Eternal Update Thread");
 		th.start();
-
-		if (!new File("System/Components").exists()) {
-			return;
-		}
-
-
 	}
 
 	public static void shutdown() {

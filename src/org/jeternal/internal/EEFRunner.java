@@ -7,10 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.zip.ZipEntry;
 
 import javax.imageio.ImageIO;
+import javax.script.CompiledScript;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -28,7 +31,9 @@ public class EEFRunner {
 
 	private Object[] argv;
 	private NashornScriptEngine engine;
+	private static Map<String, CompiledScript> cache = new HashMap<>();
 	private Image icon;
+	public static final boolean ENABLE_SCRIPT_CACHING = true;
 	
 	static class DefaultClassFilter implements ClassFilter {
 
@@ -97,8 +102,16 @@ public class EEFRunner {
 				return ESLLoader.load(engine, new File(string));
 			});
 			// Start
-			engine.eval(new InputStreamReader(in));
-			
+			if (eef != null && ENABLE_SCRIPT_CACHING) {
+				if (cache.containsKey(eef.getName())) {
+					cache.get(eef.getName()).eval(engine.getContext());
+				} else {
+					cache.put(eef.getName(), engine.compile(new InputStreamReader(in)));
+					cache.get(eef.getName()).eval();
+				}
+			} else {
+				engine.eval(new InputStreamReader(in));
+			}
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
