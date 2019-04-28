@@ -112,6 +112,7 @@ public class Jeternal {
 		jEternal.add(desktop);
 		jEternal.setTitle("JEternal: " + username);
 		jEternal.revalidate();
+		AudioSystem.play(new File("vfs/System/Resources/Audio/login.wav"));
 		init();
 	}
 

@@ -61,7 +61,7 @@ public class Desktop extends JDesktopPane {
 			startButton = new Button();
 			startButton.setSize(32, 32);
 			startButton.setFullIcon(true);
-			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo128.png")));
+			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo32.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -230,10 +230,28 @@ public class Desktop extends JDesktopPane {
 		}
 		return c;
 	}
+	
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.white);
+		if (taskBar != null) {
+			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
+			JInternalFrame frame = getSelectedFrame();
+			if (frame != null) {
+				g.drawString("Selected frame:", 0, 12);
+				g.drawString("X = " + frame.getX(), 0, 24);
+				g.drawString("Y = " + frame.getY(), 0, 36);
+				g.drawString("Width = " + frame.getWidth(), 0, 48);
+				g.drawString("Height = " + frame.getHeight(), 0, 60);
+			}
+		} else {
+			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight());
+		}
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
 		super.paintComponent(g);
 		if (utilButton != null) {
 			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
@@ -255,26 +273,6 @@ public class Desktop extends JDesktopPane {
 			g.fillRect(fX, fY, selectWidth, selectHeight);
 			g.setColor(Color.BLUE);
 		}
-		g.setColor(Color.white);
-		if (taskBar != null) {
-			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
-			JInternalFrame frame = getSelectedFrame();
-			if (frame != null) {
-				g.drawString("Selected frame:", 0, 12);
-				g.drawString("X = " + frame.getX(), 0, 24);
-				g.drawString("Y = " + frame.getY(), 0, 36);
-				g.drawString("Width = " + frame.getWidth(), 0, 48);
-				g.drawString("Height = " + frame.getHeight(), 0, 60);
-			}
-		} else {
-			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight());
-		}
-		//Component c = lowestComponentAt(this, mouseX, mouseY);
-
-		//System.out.println(c);
-		//if (c instanceof JEComponent) {
-		//	g.drawImage(((JEComponent) c).getLightWeightCursor(), mouseX, mouseY, null);
-		//}
 	}
 
 }
