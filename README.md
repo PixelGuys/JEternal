@@ -20,10 +20,3 @@ Desktop:
 
 
 ![Example Picture of JEternal (pre-19.04) 2](https://gamexmc.000webhostapp.com/misc/JEternalExample2.png)
-
-## Credits
-Cristi Flavian - Mega Designer
-
-Randy Ramde - Main Developer
-
-Albert Flavian - Secondary Developer + Designer
