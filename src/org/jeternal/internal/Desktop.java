@@ -39,7 +39,6 @@ public class Desktop extends JDesktopPane {
 	private int selectHeight;
 	private Button utilButton;
 	private Button startButton;
-	private EternalMenu ete;
 
 	private BufferedImage desktopImage;
 	private JPanel taskBar;
@@ -61,21 +60,10 @@ public class Desktop extends JDesktopPane {
 			startButton = new Button();
 			startButton.setSize(32, 32);
 			startButton.setFullIcon(true);
-			startButton.setOnAction(() -> {
-				if (ete == null) {
-					ete = new EternalMenu();
-					add(ete);
-				} else {
-					remove(ete);
-					ete = null;
-				}
-			});
 			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo32.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		//		add(utilButton);
 		add(startButton);
 		utilButton.setOnAction(new Runnable() {
 
@@ -85,7 +73,6 @@ public class Desktop extends JDesktopPane {
 			}
 
 		});
-		System.out.println(java.awt.BorderLayout.CENTER);
 		refreshDesktop();
 		taskBar = new JPanel();
 		taskBar.setBackground(new Color(100, 100, 157, 163));
@@ -267,9 +254,6 @@ public class Desktop extends JDesktopPane {
 		}
 		if (startButton != null) {
 			startButton.setBounds(0, getHeight() - 42, 42, 42);
-		}
-		if (ete != null) {
-			ete.setBounds(0, getHeight() - 42 - 300, 200, 300);
 		}
 		if (taskBar != null) {
 			taskBar.setLocation(new Point(42, getHeight() - 42));

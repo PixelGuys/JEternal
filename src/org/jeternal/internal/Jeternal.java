@@ -19,8 +19,12 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ListDataListener;
@@ -76,6 +80,31 @@ public class Jeternal {
 			}
 			IO_LIB = lib;
 		}
+		
+		JMenu programs = new JMenu("Programs");
+		{
+			JMenuItem item = new JMenuItem("Notepad");
+			programs.add(item);
+		}
+		{
+			JMenuItem item = new JMenuItem("Settings");
+			programs.add(item);
+		}
+		{
+			JMenuItem item = new JMenuItem("Demo App");
+			programs.add(item);
+		}
+		
+		JMenuItem powerOff = new JMenuItem("Power Off");
+		powerOff.addActionListener((event) -> {
+			System.exit(0);
+		});
+		
+		JMenuBar bar = new JMenuBar();
+		bar.add(programs);
+		bar.add(new JSeparator());
+		bar.add(powerOff);
+		Jeternal.jEternal.setJMenuBar(bar);
 	}
 
 	public static void login(String username, char[] password) {
