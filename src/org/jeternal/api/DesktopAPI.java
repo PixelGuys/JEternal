@@ -1,7 +1,7 @@
 package org.jeternal.api;
 
-import org.jeternal.internal.Desktop;
-import org.jeternal.sdk.components.Window;
+import org.jeternal.internal.*;
+import org.jeternal.sdk.components.*;
 
 public class DesktopAPI {
 
@@ -22,5 +22,4 @@ public class DesktopAPI {
 	public void removeWindow(Window win) {
 		desktop.remove(win);
 	}
-	
 }

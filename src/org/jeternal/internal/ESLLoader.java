@@ -1,18 +1,18 @@
 package org.jeternal.internal;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import org.jeternal.internal.eef.ESLFile;
+import org.jeternal.internal.eef.*;
 
-import jdk.nashorn.api.scripting.NashornScriptEngine;
+import jdk.nashorn.api.scripting.*;
 
+@SuppressWarnings("removal")
 public class ESLLoader {
 
 	public static ESLFile load(NashornScriptEngine nse, File path) {
 		try {
 			return new ESLFile(nse, new File("vfs", path.toString()));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}

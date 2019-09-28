@@ -1,41 +1,20 @@
 package org.jeternal.internal.eef.js;
 
-import java.awt.Color;
-import java.awt.DisplayMode;
-import java.awt.Graphics;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import org.jeternal.internal.Jeternal;
+import javax.imageio.*;
+import javax.swing.*;
+import org.jeternal.internal.*;
 import org.jeternal.sdk.components.Window;
 
 public class UI {
 
 	public static class ImageView extends JPanel {
 
+		private static final long serialVersionUID = 1L;
+		
 		private Image image;
 
 		public void setImage(Image image) {
@@ -59,6 +38,8 @@ public class UI {
 
 	public static class ChoiceBox extends JComboBox<Object> {
 
+		private static final long serialVersionUID = 1L;
+		
 		private Object[] o;
 
 		public void setValues(Object[] values) {
@@ -69,6 +50,8 @@ public class UI {
 
 		public ChoiceBox() {
 			setModel(new DefaultComboBoxModel<Object>() {
+
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public int getSize() {
@@ -170,56 +153,41 @@ public class UI {
 	}
 
 	public Object createComponent(String name, Object... args) {
-		if (name.equals("Button")) {
+		if (name.equals("Button"))
 			return new JButton("{jeternal.default.button}");
-		}
-		if (name.equals("ImageView")) {
+		if (name.equals("ImageView"))
 			return new ImageView();
-		}
-		if (name.equals("Label")) {
+		if (name.equals("Label"))
 			return new JLabel("{jeternal.default.label}");
-		}
-		if (name.equals("Pane")) {
+		if (name.equals("Pane"))
 			return new JPanel();
-		}
-		if (name.equals("Scroller")) {
+		if (name.equals("Scroller"))
 			return new JScrollPane((JComponent) args[0]);
-		}
-		if (name.equals("PasswordField")) {
+		if (name.equals("PasswordField"))
 			return new JPasswordField();
-		}
-		if (name.equals("TextField")) {
+		if (name.equals("TextField"))
 			return new JTextField();
-		}
-		if (name.equals("TextArea")) {
+		if (name.equals("TextArea"))
 			return new JTextArea();
-		}
 		// Menus
-		if (name.equals("MenuBar")) {
+		if (name.equals("MenuBar"))
 			return new JMenuBar();
-		}
-		if (name.equals("Menu")) {
+		if (name.equals("Menu"))
 			return new JMenu();
-		}
-		if (name.equals("MenuItem")) {
+		if (name.equals("MenuItem"))
 			return new JMenuItem();
-		}
-		if (name.equals("FileChooser")) {
+		if (name.equals("FileChooser"))
 			return new JFileChooser();
-
-		}
-		if (name.equals("ChoiceBox")) {
+		if (name.equals("ChoiceBox"))
 			return new ChoiceBox();
-		}
 		return null;
 	}
 
 	public Image readImage(String file) {
 		try {
 			return ImageIO.read(new File(file));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
-
 }

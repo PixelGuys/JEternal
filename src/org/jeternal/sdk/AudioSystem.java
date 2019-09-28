@@ -1,11 +1,8 @@
 package org.jeternal.sdk;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.*;
 
 public class AudioSystem {
 
@@ -20,16 +17,14 @@ public class AudioSystem {
 	}
 	
 	public static void play(File wav) {
-		while (clip.isRunning()) {
+		while (clip.isRunning())
 			Thread.onSpinWait();
-		}
-		if (clip.isOpen()) {
+		if (clip.isOpen())
 			clip.close();
-		}
 		try {
 			clip.open(javax.sound.sampled.AudioSystem.getAudioInputStream(wav));
 			clip.start();
-		} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("close");

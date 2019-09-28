@@ -14,5 +14,4 @@ public class DefaultEvent extends Event {
 	public String toString() {
 		return "DefaultEvent[bundled=" + bundled + ",source=" + source.getClass() + ",type=" + type + "]";
 	}
-
 }

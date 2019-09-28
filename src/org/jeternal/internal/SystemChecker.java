@@ -1,8 +1,8 @@
 package org.jeternal.internal;
 
-import java.io.File;
+import java.io.*;
 
-import org.jeternal.sdk.FileSystem;
+import org.jeternal.sdk.*;
 
 public class SystemChecker {
 

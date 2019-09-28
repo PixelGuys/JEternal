@@ -1,34 +1,21 @@
 package org.jeternal.internal;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import java.io.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import javax.imageio.*;
+import javax.swing.*;
 
-import org.jeternal.internal.eef.EEFFile;
-import org.jeternal.sdk.FileSystem;
+import org.jeternal.internal.eef.*;
+import org.jeternal.sdk.*;
+import org.jeternal.sdk.components.*;
 import org.jeternal.sdk.components.Button;
 import org.jeternal.sdk.components.Window;
-import org.jeternal.update.InstallationProgram;
+import org.jeternal.update.*;
 
+@SuppressWarnings("unused")
 public class Desktop extends JDesktopPane {
 
 	private static final long serialVersionUID = -6251283294376465705L;
@@ -61,7 +48,7 @@ public class Desktop extends JDesktopPane {
 			startButton.setSize(32, 32);
 			startButton.setFullIcon(true);
 			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo32.png")));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		add(startButton);
@@ -69,7 +56,11 @@ public class Desktop extends JDesktopPane {
 
 			@Override
 			public void run() {
-				Jeternal.shell(FileSystem.loadJavaFile("./System/SysApps/Shortcutse.eef"));
+				try {
+					Jeternal.shell(FileSystem.loadJavaFile("./System/SysApps/Shortcutse.eef"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -114,7 +105,7 @@ public class Desktop extends JDesktopPane {
 					}
 				}
 				component.icon = icon;
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			add(component);
@@ -144,7 +135,7 @@ public class Desktop extends JDesktopPane {
 		
 		try {
 			SystemChecker.checkIntegrity();
-		} catch (IllegalStateException e) {
+		} catch (Exception e) {
 			System.err.println(e.getMessage() + ", starting installation");
 			missing_();
 			return;
@@ -158,10 +149,10 @@ public class Desktop extends JDesktopPane {
 		}
 		try {
 			desktopImage = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/Wallpapers/CustomWallpaper.png"));
-		} catch (IOException e) {
+		} catch (Exception e) {
 			try {
 				desktopImage = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/Wallpapers/JEternalBackground.png"));
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
@@ -249,19 +240,16 @@ public class Desktop extends JDesktopPane {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (utilButton != null) {
+		if (utilButton != null)
 			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
-		}
-		if (startButton != null) {
+		if (startButton != null)
 			startButton.setBounds(0, getHeight() - 42, 42, 42);
-		}
 		if (taskBar != null) {
 			taskBar.setLocation(new Point(42, getHeight() - 42));
 			taskBar.setSize(new Dimension(getWidth() - 42, 42));
 		}
-		if (desktopImage != null) {
+		if (desktopImage != null)
 			g.drawImage(desktopImage, 0, 0, getWidth(), getHeight(), null);
-		}
 		int fX = selectX;
 		int fY = selectY;
 		if (selectX != 0) {
@@ -270,5 +258,4 @@ public class Desktop extends JDesktopPane {
 			g.setColor(Color.BLUE);
 		}
 	}
-
 }

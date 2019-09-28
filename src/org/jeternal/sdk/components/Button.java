@@ -1,12 +1,8 @@
 package org.jeternal.sdk.components;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
 
-import javax.swing.JComponent;
+import java.awt.event.*;
 
 public class Button extends JEComponent {
 	
@@ -16,8 +12,6 @@ public class Button extends JEComponent {
 	private String text = "";
 	private Image icon;
 	private boolean fullIcon;
-	
-	
 	
 	public boolean havesFullIcon() {
 		return fullIcon;

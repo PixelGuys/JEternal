@@ -1,11 +1,9 @@
 package org.jeternal.internal.eef;
 
-import java.io.InputStream;
+import java.io.*;
 
 public class Manifest {
 
-	public Manifest(InputStream is) {
-		
-	}
+	public Manifest(InputStream is) {}
 	
 }

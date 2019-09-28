@@ -1,32 +1,20 @@
 package org.jeternal.internal;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.zip.ZipEntry;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.zip.*;
 
-import javax.imageio.ImageIO;
-import javax.script.CompiledScript;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
+import javax.imageio.*;
+import javax.script.*;
 
-import org.jeternal.internal.eef.EEFFile;
-import org.jeternal.internal.eef.ESLFile;
-import org.jeternal.internal.eef.Manifest;
-import org.jeternal.internal.eef.js.Misc;
+import org.jeternal.internal.eef.*;
+import org.jeternal.internal.eef.js.*;
 
-import jdk.nashorn.api.scripting.ClassFilter;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import jdk.nashorn.api.scripting.*;
 
+@SuppressWarnings({"removal" , "unused"})
 public class EEFRunner {
 
 	private Object[] argv;
@@ -112,14 +100,14 @@ public class EEFRunner {
 			} else {
 				engine.eval(new InputStreamReader(in));
 			}
-		} catch (ScriptException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		// End
 	}
 	
-	public void start() throws IOException {
+	public void start() throws Exception {
 		Thread th = new Thread() {
 			public void run() {
 				try {
@@ -131,18 +119,17 @@ public class EEFRunner {
 					}
 					runJS(main);
 					eef.close();
-				} catch (IOException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		};
 		th.setDaemon(true);
-		th.setName("EEF-"+file);
+		th.setName("EEF-" + file);
 		th.start();
 	}
 
 	EEFRunner(EEFFile file) throws IOException {
 		this.eef = file;
 	}
-
 }

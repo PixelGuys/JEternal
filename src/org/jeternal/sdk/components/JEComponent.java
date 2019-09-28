@@ -1,11 +1,13 @@
 package org.jeternal.sdk.components;
 
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 public class JEComponent extends JComponent {
 
+	private static final long serialVersionUID = 1L;
+	
 	private BufferedImage cursor;
 	
 	public void setCursor(BufferedImage cursor) {

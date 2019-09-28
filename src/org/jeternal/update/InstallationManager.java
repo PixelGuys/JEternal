@@ -1,19 +1,15 @@
 package org.jeternal.update;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Scanner;
-import java.util.regex.Pattern;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 
-import org.jeternal.sdk.FileSystem;
+import org.jeternal.sdk.*;
 
+@SuppressWarnings("resource")
 public class InstallationManager {
 
 	static int steps;
@@ -34,7 +30,7 @@ public class InstallationManager {
 			sc.close();
 			instIn.close();
 			return "none";
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -84,5 +80,4 @@ public class InstallationManager {
 		state.setText("Finished ! Please restart JEternal");
 		bar.setValue(100);
 	}
-	
 }

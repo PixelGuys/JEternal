@@ -1,24 +1,21 @@
 package org.jeternal.internal.eef;
 
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.zip.*;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.*;
+import java.io.*;
 
 public class EEFFile extends ZipFile {
 
 	private Image image;
 	
-	public EEFFile(File file) throws IOException {
+	public EEFFile(File file) throws Exception {
 		super(file);
 	}
 	
-	public Image getIcon() throws IOException {
+	public Image getIcon() throws Exception {
 		if (image == null) {
 			ZipEntry iconFile = getEntry("res/icon.png");
 			if (iconFile != null) {
@@ -28,7 +25,7 @@ public class EEFFile extends ZipFile {
 		return image;
 	}
 	
-	public Manifest getManifest() throws IOException {
+	public Manifest getManifest() throws Exception {
 		ZipEntry mfFile = getEntry(".MANIFEST");
 		if (mfFile == null) {
 			return null;

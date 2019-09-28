@@ -1,8 +1,6 @@
 package org.jeternal.sdk;
 
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.*;
 
 public class SystemLibrary {
 
@@ -14,13 +12,12 @@ public class SystemLibrary {
 		this.url = libraryUrl;
 	}
 	
-	public SystemComponent loadComponent(String component) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public SystemComponent loadComponent(String component) throws Exception {
 		if (cld == null)
 			cld = new URLClassLoader(new URL[] {url}, SystemLibrary.class.getClassLoader());
 		Class<?> cl = cld.loadClass(component);
-		if (SystemComponent.class.isAssignableFrom(cl)) {
+		if (SystemComponent.class.isAssignableFrom(cl))
 			return (SystemComponent) cl.getConstructor().newInstance();
-		}
 		return null;
 	}
 	

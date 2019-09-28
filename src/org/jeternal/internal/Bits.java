@@ -1,6 +1,7 @@
 package org.jeternal.internal;
 
 class Bits {
+	
 	static boolean getBoolean(final byte[] array, final int n) {
 		return array[n] != 0;
 	}
@@ -22,9 +23,9 @@ class Bits {
 	}
 
 	static long getLong(final byte[] array, final int n) {
-		return (array[n + 7] & 0xFFL) + ((array[n + 6] & 0xFFL) << 8) + ((array[n + 5] & 0xFFL) << 16)
-				+ ((array[n + 4] & 0xFFL) << 24) + ((array[n + 3] & 0xFFL) << 32) + ((array[n + 2] & 0xFFL) << 40)
-				+ ((array[n + 1] & 0xFFL) << 48) + (array[n] << 56);
+		return (array[n + 7] & 0xFFL) + ((array[n + 6] & 0xFFL) << 8) + ((array[n + 5] & 0xFFL) << 16) + 
+			   ((array[n + 4] & 0xFFL) << 24) + ((array[n + 3] & 0xFFL) << 32) + ((array[n + 2] & 0xFFL) << 40) + 
+			   ((array[n + 1] & 0xFFL) << 48) + (array[n] << 56);
 	}
 
 	static double getDouble(final byte[] array, final int n) {

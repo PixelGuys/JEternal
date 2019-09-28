@@ -1,35 +1,25 @@
 package org.jeternal.sdk.components;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.event.FocusEvent.Cause;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyVetoException;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.event.FocusEvent.*;
+import java.awt.image.*;
+import java.beans.*;
 
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.plaf.InternalFrameUI;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.plaf.*;
+import javax.swing.plaf.basic.*;
 
+import org.jeternal.internal.*;
 import org.jeternal.internal.Desktop;
-import org.jeternal.internal.Jeternal;
-import org.jeternal.internal.eef.js.DefaultEvent;
-import org.jeternal.internal.eef.js.Event;
-import org.jeternal.internal.eef.js.EventManager;
+import org.jeternal.internal.eef.js.*;
 
+@SuppressWarnings({"unused" , "serial"})
 public class Window extends JInternalFrame {
 
+	private static final long serialVersionUID = 1L;
+	
 	private Image icon;
 	private Button windowButton;
 	private boolean isIconDefined = false;
@@ -241,13 +231,11 @@ public class Window extends JInternalFrame {
 		super.paintComponent(g);
 		windowButton.setText(getTitle());
 		int titleHeight = this.getMinimumSize().height - this.getUI().getMinimumSize(this).height;
-		if (ui != null && getUI() != ui) {
+		if (ui != null && getUI() != ui)
 			setUI(ui);
-		}
 		if (getWidth() != img.getWidth() || getHeight() != img.getHeight() && lightweight) {
 			oldImg = img;
 			img = new BufferedImage(getWidth(), getHeight() - titleHeight, BufferedImage.TYPE_INT_ARGB);
-
 			imgGraphics = img.createGraphics();
 			imgGraphics.setPaint(Color.BLACK);
 			imgGraphics.fillRect(0, 0, getWidth(), getHeight());
@@ -260,10 +248,9 @@ public class Window extends JInternalFrame {
 			increment = 0;
 			imgGraphics = img.createGraphics();
 		}
-		if (lightweight) {
+		if (lightweight)
 			if (appID != null)
 				EventManager.registerEvent(appID, new DefaultEvent(new Object[] {imgGraphics}, Window.this, "repaint"));
-		}
 		if (!oldSize.equals(getSize())) {
 			oldSize = getSize();
 			if (appID != null)
@@ -273,9 +260,8 @@ public class Window extends JInternalFrame {
 			g.fillRect(0, 0, getWidth(), getHeight());
 			g.drawImage(img, 0, titleHeight, null);
 		}
-		if (isClosed() && !disposed) {
+		if (isClosed() && !disposed)
 			disposeWindow();
-		}
 	}
 	
 	public void paint(Graphics g) {
@@ -283,5 +269,4 @@ public class Window extends JInternalFrame {
 		super.paint(g);
 		needRepaint = false;
 	}
-	
 }

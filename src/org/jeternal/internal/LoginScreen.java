@@ -1,25 +1,16 @@
 package org.jeternal.internal;
 
-import javax.swing.JPanel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import javax.swing.JTextField;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JPasswordField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.FlowLayout;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JLabel;
-import java.awt.Color;
+import javax.swing.*;
+import javax.swing.GroupLayout.*;
+import javax.swing.LayoutStyle.*;
+
+import java.awt.*;
+import java.awt.event.*;
 
 public class LoginScreen extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel panel;
 	private JButton btnLogin;
 	private JPanel panel_1;
@@ -42,7 +33,11 @@ public class LoginScreen extends JPanel {
 		btnLogin.setBackground(new Color(211, 211, 211));
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Jeternal.login(textField.getText(), passwordField.getPassword());
+				try {
+					Jeternal.login(textField.getText(), passwordField.getPassword());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		panel.add(btnLogin);
@@ -62,7 +57,11 @@ public class LoginScreen extends JPanel {
 		passwordField = new JPasswordField();
 		passwordField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Jeternal.login(textField.getText(), passwordField.getPassword());
+				try {
+					Jeternal.login(textField.getText(), passwordField.getPassword());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		

@@ -1,9 +1,7 @@
 package org.jeternal.sdk.io;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.jeternal.internal.Jeternal;
-import org.jeternal.sdk.SystemComponent;
+import org.jeternal.internal.*;
+import org.jeternal.sdk.*;
 
 public class File {
 
@@ -19,14 +17,13 @@ public class File {
 		this.component = component;
 	}
 	
-	public File(String path) {
+	public File(String path) throws Exception {
 		try {
 			SystemComponent c = Jeternal.IO_LIB.loadComponent("file");
 			c.comp_("init", "vfs/" + path);
 			this.path = "vfs/" + path;
 			component = c;
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException | NullPointerException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly loaded.");
 		}
@@ -61,7 +58,7 @@ public class File {
 		return (boolean) component.comp_("exists");
 	}
 	
-	public File[] list() {
+	public File[] list() throws Exception {
 		String[] paths = (String[]) component.comp_("list");
 		File[] files = new File[paths.length];
 		for (int i = 0; i < paths.length; i++) {

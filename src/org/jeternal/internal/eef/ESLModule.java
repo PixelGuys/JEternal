@@ -1,12 +1,7 @@
 package org.jeternal.internal.eef;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import javax.script.ScriptException;
+import java.io.*;
+import java.util.*;
 
 public class ESLModule {
 
@@ -31,7 +26,7 @@ public class ESLModule {
 			String path = "lib/" + klass + ".js";
 			try {
 				return file.getScriptEngine().eval(new InputStreamReader(file.getInputStream(file.getEntry(path))));
-			} catch (ScriptException | IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -41,5 +36,4 @@ public class ESLModule {
 	public String[] getExported() {
 		return exportedClasses.toArray(new String[exportedClasses.size()]);
 	}
-	
 }

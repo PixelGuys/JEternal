@@ -1,11 +1,10 @@
 package org.jeternal.internal.eef.js;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
-import org.jeternal.internal.Jeternal;
+import org.jeternal.internal.*;
 
 public class Misc {
 	
@@ -13,27 +12,20 @@ public class Misc {
 	
 	public Object loadModule(String pack, String name) {
 		if (pack.equals("system")) {
-			if (name.equals("ui")) {
+			if (name.equals("ui"))
 				return new UI();
-			}
-			if (name.equals("event")) {
+			if (name.equals("event"))
 				return new EventManager();
-			}
-			if (name.equals("filesystem")) {
+			if (name.equals("filesystem"))
 				return new FileSystem();
-			}
 		}
-		if (pack.equals("security")) {
-			if (name.equals("encryption")) {
+		if (pack.equals("security"))
+			if (name.equals("encryption"))
 				return new Encryption();
-			}
-		}
 		String corr = pack + "/" + name;
-		for (String key : registeredModules.keySet()) {
-			if (key.equals(corr)) {
+		for (String key : registeredModules.keySet())
+			if (key.equals(corr))
 				return registeredModules.get(corr);
-			}
-		}
 		return null;
 	}
 	
@@ -55,22 +47,20 @@ public class Misc {
 	
 	public byte[] charsToBytes(char[] input) {
 		byte[] bytes = new byte[input.length];
-		for (int i = 0; i < input.length; i++) {
+		for (int i = 0; i < input.length; i++)
 			bytes[i] = (byte) input[i];
-		}
 		return bytes;
 	}
 	
 	public void sleep(long duration) {
 		try {
 			Thread.sleep(duration);
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void open(String path) {
+	public void open(String path) throws Exception {
 		Jeternal.shell(new File(path));
 	}
-	
 }

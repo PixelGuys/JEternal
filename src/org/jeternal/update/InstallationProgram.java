@@ -1,17 +1,10 @@
 package org.jeternal.update;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-import javax.swing.JButton;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
-
-import org.jeternal.internal.Jeternal;
+import org.jeternal.internal.*;
 
 public class InstallationProgram {
 
@@ -96,5 +89,4 @@ public class InstallationProgram {
 		}
 		return frame;
 	}
-	
 }

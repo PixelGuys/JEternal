@@ -1,40 +1,22 @@
 package org.jeternal.internal;
 
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.util.HashMap;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.file.*;
+import java.security.*;
+import java.util.*;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.event.ListDataListener;
-import org.jeternal.internal.eef.EEFFile;
-import org.jeternal.sdk.AudioSystem;
+import javax.swing.*;
+import javax.swing.UIManager.*;
+import javax.swing.event.*;
+import org.jeternal.internal.eef.*;
+import org.jeternal.sdk.*;
 import org.jeternal.sdk.FileSystem;
-import org.jeternal.sdk.SystemComponent;
-import org.jeternal.sdk.SystemLibrary;
 import org.jeternal.sdk.components.Window;
 
+@SuppressWarnings("unused")
 public class Jeternal {
 
 	public static JFrame jEternal;
@@ -68,7 +50,7 @@ public class Jeternal {
 		}
 	}
 
-	public static void init() {
+	public static void init() throws Exception {
 		// io.jar
 		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
 		if (lib != null) {
@@ -107,7 +89,7 @@ public class Jeternal {
 		Jeternal.jEternal.setJMenuBar(bar);
 	}
 
-	public static void login(String username, char[] password) {
+	public static void login(String username, char[] password) throws Exception {
 
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA3-256");
@@ -138,7 +120,7 @@ public class Jeternal {
 		init();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 			if (info.getName().equals("CDE/Motif")) {
 				try {
@@ -240,7 +222,7 @@ public class Jeternal {
 
 	}
 
-	public static void launchEEF(File file, Object... argv) {
+	public static void launchEEF(File file, Object... argv) throws Exception {
 		try {
 			EEFFile f = new EEFFile(file);
 			EEFRunner runner = EEFRunner.launch(f, argv);
@@ -269,7 +251,7 @@ public class Jeternal {
 		return appName;
 	}
 
-	public static void shell(File file, Object... args) {
+	public static void shell(File file, Object... args) throws Exception {
 		if (file.getName().endsWith(".eef")) {
 			launchEEF(file);
 			return;
@@ -351,7 +333,11 @@ public class Jeternal {
 						window.hide();
 						desktop.remove(window);
 						ext2App.put(fileExt, list.getSelectedValue());
-						shell(file);
+						try {
+							shell(file);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
@@ -361,5 +347,4 @@ public class Jeternal {
 		window.add(pane);
 		desktop.add(window);
 	}
-
 }
