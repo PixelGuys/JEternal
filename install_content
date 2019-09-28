@@ -1,4 +1,4 @@
-VER 19.04-pre
+VER 20.04-pre
 LABEL Downloading System Components.
 MKDIR System
 MKDIR System/Components
@@ -16,9 +16,15 @@ DOWN System/Resources/Images/Cursors/LoadingCursor.png
 LABEL Downloading logo..
 DOWN System/Resources/Images/JEternalLogo128.png
 DOWN System/Resources/Images/JEternalLogo32.png
-DOWN System/Resources/Images/JEternalLogo612.png
 LABEL Downloading images..
 DOWN System/Resources/Images/FileDefaultIcon.png
+LABEL Downloading audio..
+MKDIR System/Resources/Audio
+DOWN System/Resources/Audio/login.wav
+DOWN System/Resources/Audio/notification.wav
+DOWN System/Resources/Audio/notification2.wav
+DOWN System/Resources/Audio/shutdown.wav
+DOWN System/Resources/Audio/startup.wav
 LABEL Downloading system applications..
 MKDIR System/SysApps
 DOWN System/SysApps/Pictures.eef

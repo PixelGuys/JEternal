@@ -42,7 +42,7 @@ public class Jeternal {
 
 	public static JFrame jEternal;
 	public static Desktop desktop;
-	public final static String jEternalVersion = "19.04-beta";
+	public final static String jEternalVersion = "20.04-beta";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
@@ -160,7 +160,6 @@ public class Jeternal {
 
 		});
 		AudioSystem.play(new File("vfs/System/Resources/Audio/startup.wav"));
-		jEternal.setVisible(true);
 		if (Files.exists(Paths.get("vfs/System/account.uac"))) {
 			login = new LoginScreen();
 			jEternal.add(login);
@@ -171,7 +170,6 @@ public class Jeternal {
 			jEternal.add(desktop);
 			init();
 		}
-		jEternal.dispose();
 		jEternal.setVisible(true);
 		Thread th = new Thread() {
 			@Override

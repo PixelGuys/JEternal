@@ -125,6 +125,13 @@ public class UI {
 				Jeternal.jEternal.setUndecorated(true);
 				Jeternal.jEternal.setVisible(true);
 				Jeternal.jEternal.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			} else {
+				if (Jeternal.jEternal.isUndecorated()) {
+					Jeternal.jEternal.dispose();
+					Jeternal.jEternal.setUndecorated(false);
+					Jeternal.jEternal.setVisible(true);
+					Jeternal.jEternal.setExtendedState(JFrame.NORMAL);
+				}
 			}
 		}
 		if (i != 1) {
