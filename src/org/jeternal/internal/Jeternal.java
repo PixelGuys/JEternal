@@ -1,32 +1,25 @@
 package org.jeternal.internal;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
-import java.security.Provider;
-import java.security.Security;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -42,7 +35,7 @@ public class Jeternal {
 
 	public static JFrame jEternal;
 	public static Desktop desktop;
-	public final static String jEternalVersion = "20.04-beta";
+	public final static String jEternalVersion = "19.10";
 	static double renderTime = 1000000000.0 / 24;
 	public static SystemLibrary IO_LIB;
 	public static SystemComponent IO_MAIN_COMPONENT;
@@ -96,7 +89,7 @@ public class Jeternal {
 			byte[] dc = (byte[]) is.readObject();
 			is.close();
 			if (!MessageDigest.isEqual(d, dc) || !username.equals(un)) {
-				//Toolkit.getDefaultToolkit().beep();
+				Toolkit.getDefaultToolkit().beep();
 				JOptionPane.showMessageDialog(jEternal, "Invalid username/password!", "Warning", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
@@ -125,11 +118,6 @@ public class Jeternal {
 					e.printStackTrace();
 				}
 			}
-		}
-
-		System.out.println("All security providers:");
-		for (Provider p : Security.getProviders()) {
-			System.out.println("\t- " + p.getName() + ": " + p.getInfo());
 		}
 
 		System.out.println(
