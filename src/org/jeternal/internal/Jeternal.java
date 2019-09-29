@@ -87,6 +87,11 @@ public class Jeternal {
 			JMenuItem powerOff = new JMenuItem("Power Off");
 			powerOff.addActionListener((event) -> {
 				AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				AudioSystem.close();
 				System.exit(0);
 			});
