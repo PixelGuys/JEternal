@@ -74,17 +74,48 @@ public class Jeternal {
 		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/pictures.eef")), "Pictures"));
 		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/demo.eef")), "Demo"));
 		
-		JMenuItem powerOff = new JMenuItem("Power Off");
-		powerOff.addActionListener((event) -> {
-			AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
-			AudioSystem.close();
-			System.exit(0);
-		});
+		JMenu computer = new JMenu("Computer");
+		{
+			JMenuItem powerOff = new JMenuItem("Log Out");
+			powerOff.addActionListener((event) -> {
+				AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
+				logout();
+			});
+			computer.add(powerOff);
+		}
+		{
+			JMenuItem powerOff = new JMenuItem("Power Off");
+			powerOff.addActionListener((event) -> {
+				AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
+				AudioSystem.close();
+				System.exit(0);
+			});
+			computer.add(powerOff);
+		}
 		
 		JMenuBar bar = new JMenuBar();
 		bar.add(programs);
-		bar.add(powerOff);
+		bar.add(computer);
 		Jeternal.jEternal.setJMenuBar(bar);
+	}
+	
+	public static void logout() {
+		Thread th = new Thread(() -> {
+			login = new LoginScreen();
+			jEternal.remove(desktop);
+			FSStatusScreen status = new FSStatusScreen("Logging off..");
+			jEternal.setTitle("JEternal " + jEternalVersion);
+			jEternal.setJMenuBar(null);
+			jEternal.add(status);
+			jEternal.revalidate();
+			AudioSystem.waitSound();
+			jEternal.remove(status);
+			jEternal.add(login);
+			jEternal.setSize(440, 180);
+			jEternal.setLocationRelativeTo(null);
+			jEternal.revalidate();
+		});
+		th.start();
 	}
 
 	public static void login(String username, char[] password) throws Exception {
@@ -210,9 +241,7 @@ public class Jeternal {
 	}
 
 	static void paint() {
-		if (desktop != null) {
-			desktop.repaint();
-		}
+		jEternal.repaint();
 	}
 
 	static void update() {
