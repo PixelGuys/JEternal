@@ -29,8 +29,8 @@ public class UI {
 		public void paint(Graphics g) {
 			super.paint(g);
 			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, getWidth(), getHeight());
 			if (image != null) {
+				g.fillRect(0, 0, image.getWidth(null), image.getHeight(null));
 				g.drawImage(image, 0, 0, null);
 			}
 		}
@@ -185,7 +185,7 @@ public class UI {
 
 	public Image readImage(String file) {
 		try {
-			return ImageIO.read(new File(file));
+			return ImageIO.read(new File("vfs/" + file));
 		} catch (Exception e) {
 			return null;
 		}

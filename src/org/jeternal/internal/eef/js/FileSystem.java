@@ -12,7 +12,7 @@ public class FileSystem {
 	
 	public InputStream fileInput(File file) {
 		try {
-			return new FileInputStream(new java.io.File(file.getPath()));
+			return new FileInputStream(new java.io.File("vfs/" + file.getPath()));
 		} catch (Exception e) {
 			return null;
 		}
@@ -20,7 +20,7 @@ public class FileSystem {
 	
 	public OutputStream fileOutput(File file) {
 		try {
-			return new FileOutputStream(new java.io.File(file.getPath()));
+			return new FileOutputStream(new java.io.File("vfs/" + file.getPath()));
 		} catch (Exception e) {
 			return null;
 		}

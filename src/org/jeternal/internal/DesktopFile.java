@@ -28,7 +28,6 @@ public class DesktopFile extends JComponent {
 		box.setBorderPaintedFlat(true);
 		box.setFocusPainted(false);
 		box.setIconTextGap(0);
-		box.setToolTipText("yosh");
 		setLayout(null);
 		setOpaque(false);
 		add(box);
