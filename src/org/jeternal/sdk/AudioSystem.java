@@ -16,9 +16,28 @@ public class AudioSystem {
 		}
 	}
 	
-	public static void play(File wav) {
+	public static void waitSound() {
+		if (clip == null) return;
 		while (clip.isRunning())
 			Thread.onSpinWait();
+	}
+	
+	public static void stop() {
+		if (clip == null) return;
+		if (clip.isOpen())
+			clip.close();
+	}
+	
+	public static void close() {
+		if (clip == null) return;
+		waitSound();
+		if (clip.isOpen())
+			clip.close();
+	}
+	
+	public static void play(File wav) {
+		if (clip == null) return;
+		waitSound();
 		if (clip.isOpen())
 			clip.close();
 		try {
@@ -27,7 +46,6 @@ public class AudioSystem {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println("close");
 	}
 	
 }

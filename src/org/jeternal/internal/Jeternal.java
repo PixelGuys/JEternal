@@ -48,6 +48,15 @@ public class Jeternal {
 	
 	static JMenuItem programItem(EEFFile file, String name) {
 		JMenuItem item = new JMenuItem(name);
+		try {
+			Image image = file.getIcon();
+			if (image != null) {
+				ImageIcon icon = new ImageIcon(image);
+				item.setIcon(icon);
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		item.addActionListener((event) -> {
 			try {
 				launchEEF(file.getFile());
@@ -68,12 +77,12 @@ public class Jeternal {
 		JMenuItem powerOff = new JMenuItem("Power Off");
 		powerOff.addActionListener((event) -> {
 			AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
+			AudioSystem.close();
 			System.exit(0);
 		});
 		
 		JMenuBar bar = new JMenuBar();
 		bar.add(programs);
-		bar.add(new JSeparator());
 		bar.add(powerOff);
 		Jeternal.jEternal.setJMenuBar(bar);
 	}
@@ -121,8 +130,8 @@ public class Jeternal {
 		}
 
 		System.out.println(
-				"[OS] JEternal " + jEternalVersion + " needs a X11-compatible"
-						+ " environment. Min. Java Version: 1.5. ");
+				"[INFO] JEternal " + jEternalVersion + " needs a graphical interface supported by AWT."
+						+ " Otherwises this will throw a HeadlessException.");
 		ext2App.put("png", "Pictures Viewer");
 		ext2App.put("tiff", "Pictures Viewer");
 		ext2App.put("jpg", "Pictures Viewer");
