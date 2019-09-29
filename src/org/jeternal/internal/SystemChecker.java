@@ -7,8 +7,8 @@ import org.jeternal.sdk.*;
 public class SystemChecker {
 
 	static String[] expected = new String[] {
-			"System/Components",
-			"System/Components/io.jar"
+		"System/Libraries/ete64.esl",
+		"System/SysApps/settings.eef"
 	};
 	
 	public static void checkIntegrity() {

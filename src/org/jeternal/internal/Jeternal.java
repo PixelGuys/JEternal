@@ -3,7 +3,6 @@ package org.jeternal.internal;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.reflect.*;
 import java.nio.file.*;
 import java.security.*;
 import java.util.*;
@@ -16,15 +15,12 @@ import org.jeternal.sdk.*;
 import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.components.Window;
 
-@SuppressWarnings("unused")
 public class Jeternal {
 
 	public static JFrame jEternal;
 	public static Desktop desktop;
 	public final static String jEternalVersion = "19.10";
 	static double renderTime = 1000000000.0 / 24;
-	public static SystemLibrary IO_LIB;
-	public static SystemComponent IO_MAIN_COMPONENT;
 	static HashMap<String, String> app2PathMap = new HashMap<>();
 	static HashMap<String, String> ext2App = new HashMap<>();
 	static LoginScreen login;
@@ -49,36 +45,29 @@ public class Jeternal {
 			e.printStackTrace();
 		}
 	}
+	
+	static JMenuItem programItem(EEFFile file, String name) {
+		JMenuItem item = new JMenuItem(name);
+		item.addActionListener((event) -> {
+			try {
+				launchEEF(file.getFile());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		return item;
+	}
 
 	public static void init() throws Exception {
-		// io.jar
-		SystemLibrary lib = FileSystem.SystemRessourcesLoader.loadSystemLibrary("io");
-		if (lib != null) {
-			try {
-				lib.loadComponent("io_system").comp_("init");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
-				e1.printStackTrace();
-			}
-			IO_LIB = lib;
-		}
-		
 		JMenu programs = new JMenu("Programs");
-		{
-			JMenuItem item = new JMenuItem("Notepad");
-			programs.add(item);
-		}
-		{
-			JMenuItem item = new JMenuItem("Settings");
-			programs.add(item);
-		}
-		{
-			JMenuItem item = new JMenuItem("Demo App");
-			programs.add(item);
-		}
+		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/notepad.eef")), "Notepad"));
+		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/settings.eef")), "Settings"));
+		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/pictures.eef")), "Pictures"));
+		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/demo.eef")), "Demo"));
 		
 		JMenuItem powerOff = new JMenuItem("Power Off");
 		powerOff.addActionListener((event) -> {
+			AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
 			System.exit(0);
 		});
 		
@@ -141,7 +130,7 @@ public class Jeternal {
 		ext2App.put("txt", "Notepad");
 		ext2App.put("js", "Notepad");
 		ext2App.put("eef", "Launch as EEF");
-		app2PathMap.put("Pictures Viewer", "/System/SysApps/Pictures.eef");
+		app2PathMap.put("Pictures Viewer", "/System/SysApps/pictures.eef");
 		app2PathMap.put("Launch as EEF", "%eef%"); // %eef% is a predefined execvar, it is the only execvar for .eef files
 		app2PathMap.put("Notepad", "/System/SysApps/notepad.eef");
 		jEternal = new JFrame();
@@ -174,7 +163,7 @@ public class Jeternal {
 			@Override
 			public void run() {
 				long lastRenderTime = System.nanoTime();
-				int frames = 0;
+				//int frames = 0;
 				long updatetime = 0;
 				long timer = System.currentTimeMillis();
 				while (true) {
@@ -182,7 +171,7 @@ public class Jeternal {
 					if (System.nanoTime() - lastRenderTime > renderTime) {
 						paint();
 						lastRenderTime += renderTime;
-						frames++;
+						//frames++;
 					}
 					updatetime = System.currentTimeMillis() - updatetime;
 					int sleeptime = (1000 / 24) - (int) updatetime;
@@ -196,8 +185,8 @@ public class Jeternal {
 					}
 					if (System.currentTimeMillis() - timer > 1000) {
 						timer += 1000;
-						//	System.out.println(frames + " ips");
-						frames = 0;
+						//System.out.println(frames + " ips");
+						//frames = 0;
 					}
 				}
 			}
@@ -208,7 +197,6 @@ public class Jeternal {
 
 	public static void shutdown() {
 		jEternal.dispose();
-		// TODO: Do exit finalizations
 		System.exit(0);
 	}
 
@@ -288,8 +276,6 @@ public class Jeternal {
 		window.setTitle("Open With..");
 		JList<String> list = new JList<String>();
 		list.setModel(new javax.swing.ListModel<String>() {
-
-			private static final long serialVersionUID = 1L;
 
 			@Override
 			public String getElementAt(int index) {

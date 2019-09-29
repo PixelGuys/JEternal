@@ -10,9 +10,15 @@ import java.io.*;
 public class EEFFile extends ZipFile {
 
 	private Image image;
+	private File file;
 	
 	public EEFFile(File file) throws Exception {
 		super(file);
+		this.file = file;
+	}
+	
+	public File getFile() {
+		return file;
 	}
 	
 	public Image getIcon() throws Exception {

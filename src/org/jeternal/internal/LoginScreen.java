@@ -18,10 +18,7 @@ public class LoginScreen extends JPanel {
 	private JPasswordField passwordField;
 	private JLabel lblUsername;
 	private JLabel lblPassword;
-
-	/**
-	 * Create the panel.
-	 */
+	
 	public LoginScreen() {
 		setLayout(new BorderLayout(0, 0));
 		

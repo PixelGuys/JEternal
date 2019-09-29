@@ -1,9 +1,6 @@
 VER 19.10
-LABEL Downloading System Components.
-MKDIR System
-MKDIR System/Components
-DOWN System/Components/io.jar
 LABEL Downloading System Images
+MKDIR System
 MKDIR System/Resources
 MKDIR System/Resources/Images
 LABEL Downloading default wallpapers..

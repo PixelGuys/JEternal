@@ -224,6 +224,7 @@ public class Desktop extends JDesktopPane {
 		g.setColor(Color.white);
 		if (taskBar != null) {
 			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight() - taskBar.getHeight());
+			/*
 			JInternalFrame frame = getSelectedFrame();
 			if (frame != null) {
 				g.drawString("Selected frame:", 0, 12);
@@ -232,6 +233,7 @@ public class Desktop extends JDesktopPane {
 				g.drawString("Width = " + frame.getWidth(), 0, 48);
 				g.drawString("Height = " + frame.getHeight(), 0, 60);
 			}
+			*/
 		} else {
 			g.drawString("JEternal " + Jeternal.jEternalVersion, 0, getHeight());
 		}

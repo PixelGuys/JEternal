@@ -1,28 +1,20 @@
 package org.jeternal.sdk.io;
 
-import org.jeternal.internal.*;
-import org.jeternal.sdk.*;
+import java.io.IOException;
 
 public class File {
 
-	private SystemComponent component;
+	private java.io.File peer;
 	private String path;
 	
-	public static File createFromSystemComponent(SystemComponent component) {
-		File file = new File(component);
-		return file;
-	}
-	
-	private File(SystemComponent component) {
-		this.component = component;
+	public File(java.io.File peer) {
+		this.peer = peer;
 	}
 	
 	public File(String path) throws Exception {
 		try {
-			SystemComponent c = Jeternal.IO_LIB.loadComponent("file");
-			c.comp_("init", "vfs/" + path);
 			this.path = "vfs/" + path;
-			component = c;
+			this.peer = new java.io.File(this.path);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly loaded.");
@@ -30,7 +22,7 @@ public class File {
 	}
 	
 	public String getPath() {
-		return path;
+		return path.substring(4);
 	}
 	
 	public String getName() {
@@ -42,24 +34,27 @@ public class File {
 	}
 	
 	public boolean create() {
-		return (boolean) component.comp_("create");
+		try {
+			return peer.createNewFile();
+		} catch (IOException e) {
+			return false;
+		}
 	}
 	
 	public boolean delete() {
-		return (boolean) component.comp_("delete");
+		return peer.delete();
 	}
 	
 	public boolean rename(String newName) {
-		return (boolean) component.comp_("rename", newName);
+		return peer.renameTo(new java.io.File(path, newName));
 	}
 	
 	public boolean exists() {
-		System.out.println("exists " + path);
-		return (boolean) component.comp_("exists");
+		return peer.exists();
 	}
 	
 	public File[] list() throws Exception {
-		String[] paths = (String[]) component.comp_("list");
+		String[] paths = (String[]) peer.list();
 		File[] files = new File[paths.length];
 		for (int i = 0; i < paths.length; i++) {
 			files[i] = new File(paths[i]);
