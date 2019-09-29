@@ -11,14 +11,9 @@ public class File {
 		this.peer = peer;
 	}
 	
-	public File(String path) throws Exception {
-		try {
-			this.path = "vfs/" + path;
-			this.peer = new java.io.File(this.path);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException("Fatal Error: io.jar is not correctly loaded.");
-		}
+	public File(String path) {
+		this.path = "vfs/" + path;
+		this.peer = new java.io.File(this.path);
 	}
 	
 	public String getPath() {
