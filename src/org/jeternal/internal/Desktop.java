@@ -97,7 +97,7 @@ public class Desktop extends JDesktopPane {
 				if (appName != null) {
 					if (appName.equals("Launch as EEF")) {
 						EEFFile ef = new EEFFile(file);
-						Image ic = ef.getIcon();
+						Image ic = ef.getIcon(IconSize.X256);
 						if (ic != null) {
 							icon = ic;
 						}
