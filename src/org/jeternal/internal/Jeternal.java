@@ -87,13 +87,22 @@ public class Jeternal {
 			JMenuItem powerOff = new JMenuItem("Power Off");
 			powerOff.addActionListener((event) -> {
 				AudioSystem.play(new File("vfs/System/Resources/Audio/shutdown.wav"));
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				AudioSystem.close();
-				System.exit(0);
+				jEternal.remove(desktop);
+				FSStatusScreen status = new FSStatusScreen("Shutting down..");
+				jEternal.setTitle("JEternal " + jEternalVersion);
+				jEternal.setJMenuBar(null);
+				jEternal.add(status);
+				jEternal.revalidate();
+				Thread th = new Thread(() -> {
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					AudioSystem.close();
+					System.exit(0);
+				});
+				th.start();
 			});
 			computer.add(powerOff);
 		}

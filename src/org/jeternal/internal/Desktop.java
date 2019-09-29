@@ -24,7 +24,6 @@ public class Desktop extends JDesktopPane {
 	private int selectY;
 	private int selectWidth;
 	private int selectHeight;
-	private Button utilButton;
 	private Button startButton;
 
 	private BufferedImage desktopImage;
@@ -39,36 +38,20 @@ public class Desktop extends JDesktopPane {
 	}
 
 	void init0() {
-		utilButton = new Button();
-		utilButton.setText("Shortcutse");
-		utilButton.setSize(70, 30);
 
 		try {
-			startButton = new Button();
-			startButton.setSize(32, 32);
-			startButton.setFullIcon(true);
-			startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo32.png")));
+			//startButton = new Button();
+			//startButton.setSize(32, 32);
+			//startButton.setFullIcon(true);
+			//startButton.setIcon(ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/JEternalLogo32.png")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		add(startButton);
-		utilButton.setOnAction(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					Jeternal.shell(FileSystem.loadJavaFile("./System/SysApps/Shortcutse.eef"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-
-		});
+		//add(startButton);
 		refreshDesktop();
 		taskBar = new JPanel();
 		taskBar.setBackground(new Color(100, 100, 157, 163));
 		taskBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-		taskBar.setOpaque(true);
 		add(taskBar);
 
 	}
@@ -245,13 +228,11 @@ public class Desktop extends JDesktopPane {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (utilButton != null)
-			utilButton.setBounds(getWidth() / 2 - 15, 0, 70, 30);
 		if (startButton != null)
 			startButton.setBounds(0, getHeight() - 42, 42, 42);
 		if (taskBar != null) {
-			taskBar.setLocation(new Point(42, getHeight() - 42));
-			taskBar.setSize(new Dimension(getWidth() - 42, 42));
+			taskBar.setLocation(new Point(0, getHeight() - 42));
+			taskBar.setSize(new Dimension(getWidth(), 42));
 		}
 		if (desktopImage != null)
 			g.drawImage(desktopImage, 0, 0, getWidth(), getHeight(), null);
