@@ -93,6 +93,9 @@ public class Desktop extends JDesktopPane {
 			component.setSize(75, 75);
 			try {
 				Image icon = ImageIO.read(FileSystem.loadJavaFile("System/Resources/Images/FileDefaultIcon.png"));
+				if (file.getName().endsWith(".png")) {
+					icon = ImageIO.read(file);
+				}
 				String appName = Jeternal.getFileAssoc(file);
 				if (appName != null) {
 					if (appName.equals("Launch as EEF")) {
