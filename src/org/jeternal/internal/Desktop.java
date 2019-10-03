@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import org.jeternal.internal.eef.*;
 import org.jeternal.sdk.*;
+import org.jeternal.sdk.FileSystem;
 import org.jeternal.sdk.components.*;
 import org.jeternal.sdk.components.Button;
 import org.jeternal.sdk.components.Window;
@@ -67,7 +68,7 @@ public class Desktop extends JDesktopPane {
 		int x = 10;
 		int y = 75;
 		for (File file : files) {
-			if (x > 300) {
+			if (x > 500) {
 				y += 85;
 				x = 10;
 			}
@@ -97,6 +98,15 @@ public class Desktop extends JDesktopPane {
 			add(component);
 			x += component.getWidth() + 20;
 		}
+		
+		File trash = FileSystem.loadJavaFile("Trash");
+		if (!trash.exists()) {
+			trash.mkdirs();
+		}
+		DesktopFile trashIcon = new DesktopFile(trash);
+		trashIcon.setLocation(x, y);
+		trashIcon.setSize(75, 75);
+		add(trashIcon);
 	}
 	
 	JPopupMenu createPopupMenu() {

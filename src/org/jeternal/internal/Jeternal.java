@@ -165,7 +165,7 @@ public class Jeternal {
 
 	public static void main(String[] args) throws Exception {
 		for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-			if (info.getName().equals("CDE/Motif")) {
+			if (info.getName().equals("Nimbus")) {
 				try {
 					UIManager.setLookAndFeel(info.getClassName());
 				} catch (Exception e) {
@@ -297,7 +297,7 @@ public class Jeternal {
 			return;
 		}
 		String filePath = file.toString().replace("vfs" + File.separatorChar, "");
-		String fileExt = file.getName().substring(file.getName().indexOf('.') + 1);
+		String fileExt = file.isDirectory() ? "<$directory$>" : file.getName().substring(file.getName().indexOf('.') + 1);
 		for (String ext : ext2App.keySet()) {
 			if (ext.equals(fileExt)) {
 				String appName = ext2App.get(ext);
