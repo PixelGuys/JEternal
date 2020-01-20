@@ -25,6 +25,7 @@ DOWN System/Resources/Audio/shutdown.wav
 DOWN System/Resources/Audio/startup.wav
 LABEL Downloading system applications..
 MKDIR System/SysApps
+DOWN System/SysApps/demo.eef
 DOWN System/SysApps/pictures.eef
 DOWN System/SysApps/settings.eef
 DOWN System/SysApps/notepad.eef
