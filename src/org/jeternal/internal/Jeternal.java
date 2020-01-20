@@ -69,10 +69,12 @@ public class Jeternal {
 
 	public static void init() throws Exception {
 		JMenu programs = new JMenu("Programs");
-		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/notepad.eef")), "Notepad"));
-		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/settings.eef")), "Settings"));
-		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/pictures.eef")), "Pictures"));
-		programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/demo.eef")), "Demo"));
+		if (new File("vfs/System/SysApps").exists()) {
+			programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/notepad.eef")), "Notepad"));
+			programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/settings.eef")), "Settings"));
+			programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/pictures.eef")), "Pictures"));
+			programs.add(programItem(new EEFFile(new File("vfs/System/SysApps/demo.eef")), "Demo"));
+		}
 		
 		JMenu computer = new JMenu("Computer");
 		{
@@ -149,10 +151,13 @@ public class Jeternal {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(jEternal, "Encryption or Account error!");
+			if (new File("vfs/System/account").exists()) {
+				JOptionPane.showMessageDialog(jEternal, "Encryption or Account error!");
+				return;
+			}
 		}
 
-		desktop = new Desktop();
+		if(desktop==null)desktop = new Desktop();
 		jEternal.setSize(1280, 720);
 		jEternal.setLocationRelativeTo(null);
 		jEternal.remove(login);
