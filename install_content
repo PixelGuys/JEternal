@@ -20,6 +20,7 @@ MKDIR System/Resources/Audio
 DOWN System/Resources/Audio/login.wav
 DOWN System/Resources/Audio/notification.wav
 DOWN System/Resources/Audio/notification2.wav
+DOWN System/Resources/Audio/notification3.wav
 DOWN System/Resources/Audio/shutdown.wav
 DOWN System/Resources/Audio/startup.wav
 LABEL Downloading system applications..
@@ -35,7 +36,7 @@ MKDIR System/ApplicationData
 LABEL Installing system apps..
 LABEL Creating Desktop
 MKDIR Desktop
-DOWN Desktop/LaunchMe.eef
-DOWN Desktop/notepad.eef
-DOWN Desktop/settings.eef
+DOWN Desktop/logo.png
+DOWN Desktop/background.png
+DOWN Desktop/test.txt
 LABEL Installation done!
