@@ -42,8 +42,8 @@ public class InstallationProgram {
 			frame.setLayout(new BorderLayout());
 			JTextArea area = new JTextArea(
 					"Thanks for downloading JEternal.\n"
-							+ "Click \"Install\" to install the necesarry resources from remote repositories (GitHub).\n"
-							+ "Click \"Exit\" to cancel the installation program."
+							+ "Click \"Install\" to install the necesarry resources from the remote repository (GitHub).\n"
+							+ "Click \"Quit\" to cancel the installation."
 					);
 			area.setEditable(false);
 			frame.add(BorderLayout.CENTER, area);
